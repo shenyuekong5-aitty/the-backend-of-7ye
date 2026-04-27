@@ -1,0 +1,22 @@
+services:
+  db:
+    container_name: 7ye-spring-boot
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: aitty
+      POSTGRES_PASSWORD: aitty
+      POSTGRES_DB: 7ye
+      PGDATA: /data/postgres
+    volumes:
+      - db:/data/7ye
+    ports:
+      - "5332:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+networks:
+  db:
+    driver: bridge
+volumes:
+  db:
