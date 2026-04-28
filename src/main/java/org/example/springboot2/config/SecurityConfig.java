@@ -56,7 +56,7 @@ public class SecurityConfig {
                                 antMatcher("/api/quote/**"),
                                 antMatcher("/api/creed/**"),
                                 antMatcher("/api/tag/**"),
-                                antMatcher("/api/cognition/**"),
+                                antMatcher("/api/cognize/**"),
                                 antMatcher("/api/comment/**"),
                                 antMatcher("/api/study/**"),
                                 antMatcher("/api/favorite/**"),
