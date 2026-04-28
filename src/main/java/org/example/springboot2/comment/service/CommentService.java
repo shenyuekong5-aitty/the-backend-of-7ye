@@ -1,10 +1,12 @@
 package org.example.springboot2.comment.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.springboot2.comment.entity.Comment;
 import org.example.springboot2.comment.repository.CommentRepository;
 import org.example.springboot2.interaction.like.service.LikeService;
 import org.example.springboot2.user.entity.User;
 import org.example.springboot2.user.service.UserService;
+import org.example.springboot2.websocket.WebSocketServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +31,9 @@ public class CommentService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ObjectMapper objectMapper; // 用于序列化 WebSocket 消息
 
     public Map<String, Object> getCommentTree(int pageNo, int pageSize, String token,
                                               String targetType, Long targetId) {
@@ -90,6 +95,7 @@ public class CommentService {
                               String targetType, Long targetId) {
         User user = userService.getUserByToken(token);
         if (user == null) throw new RuntimeException("用户未登录或Token无效");
+
         Comment comment = new Comment();
         comment.setParentId(parentId);
         comment.setContent(content);
@@ -98,7 +104,24 @@ public class CommentService {
         comment.setAvatar(user.getAvatar());
         comment.setTargetType(targetType);
         comment.setTargetId(targetId);
-        return commentRepository.save(comment);
+
+        Comment saved = commentRepository.save(comment);
+
+        // WebSocket 实时推送新评论
+        try {
+            Map<String, Object> msg = new HashMap<>();
+            msg.put("type", "new_comment");
+            msg.put("targetType", targetType);
+            msg.put("targetId", targetId);
+            msg.put("data", saved);
+            String jsonMsg = objectMapper.writeValueAsString(msg);
+            WebSocketServer.broadcast(jsonMsg);
+        } catch (Exception e) {
+            // 推送失败不应影响主流程，仅记录日志
+            e.printStackTrace();
+        }
+
+        return saved;
     }
 
     @Transactional
