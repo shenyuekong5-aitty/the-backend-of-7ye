@@ -1,7 +1,10 @@
 package org.example.springboot2.study.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "sys_study")
@@ -29,9 +32,14 @@ public class Study {
     @Column(name = "author_name", length = 50)
     private String authorName;
 
-    /** 所属二级分类ID，对应 sys_study_category 表的 id */
-    @Column(name = "category_id")
-    private Long categoryId;
+    @ManyToMany
+    @JoinTable(
+            name = "sys_study_category_link",
+            joinColumns = @JoinColumn(name = "study_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    @JsonIgnoreProperties("studies")   // 防止循环引用
+    private Set<StudyCategory> categories = new HashSet<>();
 
     @Column(name = "view_count")
     private Integer viewCount = 0;
@@ -59,7 +67,7 @@ public class Study {
         updateTime = LocalDateTime.now();
     }
 
-    // getters and setters
+    // ===================== Getter / Setter =====================
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getTitle() { return title; }
@@ -74,8 +82,8 @@ public class Study {
     public void setAuthorId(Long authorId) { this.authorId = authorId; }
     public String getAuthorName() { return authorName; }
     public void setAuthorName(String authorName) { this.authorName = authorName; }
-    public Long getCategoryId() { return categoryId; }
-    public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }
+    public Set<StudyCategory> getCategories() { return categories; }
+    public void setCategories(Set<StudyCategory> categories) { this.categories = categories; }
     public Integer getViewCount() { return viewCount; }
     public void setViewCount(Integer viewCount) { this.viewCount = viewCount; }
     public Integer getLikeCount() { return likeCount; }

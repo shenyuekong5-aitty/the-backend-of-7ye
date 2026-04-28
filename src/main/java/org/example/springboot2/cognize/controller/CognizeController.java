@@ -41,4 +41,60 @@ public class CognizeController {
         response.put("data", cognize);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/add")
+    public ResponseEntity<Map<String, Object>> addCognize(
+            @RequestHeader("token") String token,
+            @RequestBody Cognize cognize) {
+        try {
+            Cognize saved = cognizeService.addCognize(token, cognize);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 200);
+            response.put("data", saved);
+            response.put("message", "创建成功");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 500);
+            response.put("message", e.getMessage());
+            return ResponseEntity.ok(response);
+        }
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Map<String, Object>> updateCognize(
+            @RequestHeader("token") String token,
+            @RequestBody Cognize cognize) {
+        try {
+            Cognize updated = cognizeService.updateCognize(token, cognize);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 200);
+            response.put("data", updated);
+            response.put("message", "更新成功");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 403);
+            response.put("message", e.getMessage());
+            return ResponseEntity.ok(response);
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Map<String, Object>> deleteCognize(
+            @RequestHeader("token") String token,
+            @PathVariable Long id) {
+        try {
+            cognizeService.deleteCognize(token, id);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 200);
+            response.put("message", "删除成功");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 403);
+            response.put("message", e.getMessage());
+            return ResponseEntity.ok(response);
+        }
+    }
 }

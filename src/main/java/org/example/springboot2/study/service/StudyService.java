@@ -11,10 +11,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,27 +26,21 @@ public class StudyService {
     @Autowired
     private UserService userService;
 
-    /**
-     * 分页获取学习列表，可按分类筛选
-     * @param pageNo   页码
-     * @param pageSize 每页条数
-     * @param categoryId 分类ID，为null时查询全部
-     */
-    public Map<String, Object> getStudyList(int pageNo, int pageSize, Long categoryId, Long parentCategoryId) {
+    public Map<String, Object> getStudyList(int pageNo, int pageSize,
+                                            List<Long> categoryIds,
+                                            Long parentCategoryId) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by(Sort.Direction.DESC, "createTime"));
         Page<Study> page;
 
-        if (categoryId != null) {
-            page = studyRepository.findByCategoryIdOrderByCreateTimeDesc(categoryId, pageable);
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            page = studyRepository.findByCategoryIdsOrderByCreateTimeDesc(categoryIds, pageable);
         } else if (parentCategoryId != null) {
             List<StudyCategory> subCategories = categoryRepository.findByParentId(parentCategoryId);
-            List<Long> subIds = subCategories.stream()
-                    .map(StudyCategory::getId)
-                    .collect(Collectors.toList());
+            List<Long> subIds = subCategories.stream().map(StudyCategory::getId).collect(Collectors.toList());
             if (subIds.isEmpty()) {
                 page = new PageImpl<>(Collections.emptyList(), pageable, 0);
             } else {
-                page = studyRepository.findByCategoryIdInOrderByCreateTimeDesc(subIds, pageable);
+                page = studyRepository.findByCategoryIdsOrderByCreateTimeDesc(subIds, pageable);
             }
         } else {
             page = studyRepository.findAllByOrderByCreateTimeDesc(pageable);
@@ -68,7 +59,7 @@ public class StudyService {
     }
 
     @Transactional
-    public Study addStudy(String token, Study study) {
+    public Study addStudy(String token, Study study, List<Long> categoryIds) {
         User user = userService.getUserByToken(token);
         if (user == null) {
             throw new RuntimeException("请先登录");
@@ -79,12 +70,18 @@ public class StudyService {
         study.setViewCount(0);
         study.setLikeCount(0);
         study.setFavoriteCount(0);
-        // categoryId 由前端传入，直接保存
+
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            Set<StudyCategory> categories = categoryRepository.findAllById(categoryIds)
+                    .stream().collect(Collectors.toSet());
+            study.setCategories(categories);
+        }
+
         return studyRepository.save(study);
     }
 
     @Transactional
-    public Study updateStudy(String token, Study study) {
+    public Study updateStudy(String token, Study study, List<Long> categoryIds) {
         User user = userService.getUserByToken(token);
         if (user == null) {
             throw new RuntimeException("请先登录");
@@ -102,7 +99,13 @@ public class StudyService {
         existing.setDescription(study.getDescription());
         existing.setAdvantage(study.getAdvantage());
         existing.setDisadvantage(study.getDisadvantage());
-        existing.setCategoryId(study.getCategoryId());  // 允许修改分类
+
+        if (categoryIds != null) {
+            Set<StudyCategory> categories = categoryRepository.findAllById(categoryIds)
+                    .stream().collect(Collectors.toSet());
+            existing.setCategories(categories);
+        }
+
         return studyRepository.save(existing);
     }
 

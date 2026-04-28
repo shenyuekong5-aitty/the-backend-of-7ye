@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/study")
@@ -20,9 +20,9 @@ public class StudyController {
     public ResponseEntity<Map<String, Object>> getStudyList(
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize,
-            @RequestParam(required = false) Long categoryId,
-            @RequestParam(required = false) Long parentCategoryId) {   // ✅ 新增
-        Map<String, Object> data = studyService.getStudyList(pageNo, pageSize, categoryId, parentCategoryId);
+            @RequestParam(required = false) List<Long> categoryIds,
+            @RequestParam(required = false) Long parentCategoryId) {
+        Map<String, Object> data = studyService.getStudyList(pageNo, pageSize, categoryIds, parentCategoryId);
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);
         response.put("data", data);
@@ -48,9 +48,23 @@ public class StudyController {
     @PostMapping("/add")
     public ResponseEntity<Map<String, Object>> addStudy(
             @RequestHeader("token") String token,
-            @RequestBody Study study) {
+            @RequestBody Map<String, Object> body) {
         try {
-            Study saved = studyService.addStudy(token, study);
+            Study study = new Study();
+            study.setTitle((String) body.get("title"));
+            study.setDescription((String) body.get("description"));
+            study.setAdvantage((String) body.get("advantage"));
+            study.setDisadvantage((String) body.get("disadvantage"));
+
+            List<Long> categoryIds = null;
+            Object rawIds = body.get("categoryIds");
+            if (rawIds instanceof List) {
+                categoryIds = ((List<?>) rawIds).stream()
+                        .map(id -> Long.valueOf(id.toString()))
+                        .collect(Collectors.toList());
+            }
+
+            Study saved = studyService.addStudy(token, study, categoryIds);
             Map<String, Object> response = new HashMap<>();
             response.put("code", 200);
             response.put("data", saved);
@@ -67,9 +81,24 @@ public class StudyController {
     @PutMapping("/update")
     public ResponseEntity<Map<String, Object>> updateStudy(
             @RequestHeader("token") String token,
-            @RequestBody Study study) {
+            @RequestBody Map<String, Object> body) {
         try {
-            Study updated = studyService.updateStudy(token, study);
+            Study study = new Study();
+            study.setId(Long.valueOf(body.get("id").toString()));
+            study.setTitle((String) body.get("title"));
+            study.setDescription((String) body.get("description"));
+            study.setAdvantage((String) body.get("advantage"));
+            study.setDisadvantage((String) body.get("disadvantage"));
+
+            List<Long> categoryIds = null;
+            Object rawIds = body.get("categoryIds");
+            if (rawIds instanceof List) {
+                categoryIds = ((List<?>) rawIds).stream()
+                        .map(id -> Long.valueOf(id.toString()))
+                        .collect(Collectors.toList());
+            }
+
+            Study updated = studyService.updateStudy(token, study, categoryIds);
             Map<String, Object> response = new HashMap<>();
             response.put("code", 200);
             response.put("data", updated);
