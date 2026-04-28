@@ -1,19 +1,21 @@
 package org.example.springboot2.study.service;
 
 import org.example.springboot2.study.entity.Study;
+import org.example.springboot2.study.entity.StudyCategory;
+import org.example.springboot2.study.repository.StudyCategoryRepository;
 import org.example.springboot2.study.repository.StudyRepository;
 import org.example.springboot2.user.entity.User;
 import org.example.springboot2.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class StudyService {
@@ -22,11 +24,36 @@ public class StudyService {
     private StudyRepository studyRepository;
 
     @Autowired
+    private StudyCategoryRepository categoryRepository;
+
+    @Autowired
     private UserService userService;
 
-    public Map<String, Object> getStudyList(int pageNo, int pageSize) {
+    /**
+     * 分页获取学习列表，可按分类筛选
+     * @param pageNo   页码
+     * @param pageSize 每页条数
+     * @param categoryId 分类ID，为null时查询全部
+     */
+    public Map<String, Object> getStudyList(int pageNo, int pageSize, Long categoryId, Long parentCategoryId) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by(Sort.Direction.DESC, "createTime"));
-        Page<Study> page = studyRepository.findAllByOrderByCreateTimeDesc(pageable);
+        Page<Study> page;
+
+        if (categoryId != null) {
+            page = studyRepository.findByCategoryIdOrderByCreateTimeDesc(categoryId, pageable);
+        } else if (parentCategoryId != null) {
+            List<StudyCategory> subCategories = categoryRepository.findByParentId(parentCategoryId);
+            List<Long> subIds = subCategories.stream()
+                    .map(StudyCategory::getId)
+                    .collect(Collectors.toList());
+            if (subIds.isEmpty()) {
+                page = new PageImpl<>(Collections.emptyList(), pageable, 0);
+            } else {
+                page = studyRepository.findByCategoryIdInOrderByCreateTimeDesc(subIds, pageable);
+            }
+        } else {
+            page = studyRepository.findAllByOrderByCreateTimeDesc(pageable);
+        }
 
         Map<String, Object> result = new HashMap<>();
         result.put("items", page.getContent());
@@ -52,6 +79,7 @@ public class StudyService {
         study.setViewCount(0);
         study.setLikeCount(0);
         study.setFavoriteCount(0);
+        // categoryId 由前端传入，直接保存
         return studyRepository.save(study);
     }
 
@@ -74,6 +102,7 @@ public class StudyService {
         existing.setDescription(study.getDescription());
         existing.setAdvantage(study.getAdvantage());
         existing.setDisadvantage(study.getDisadvantage());
+        existing.setCategoryId(study.getCategoryId());  // 允许修改分类
         return studyRepository.save(existing);
     }
 

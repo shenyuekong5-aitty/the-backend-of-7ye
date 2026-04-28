@@ -8,11 +8,19 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public interface StudyRepository extends JpaRepository<Study, Long> {
 
+    /** 查询所有，按创建时间倒序 */
     Page<Study> findAllByOrderByCreateTimeDesc(Pageable pageable);
+
+    /** 按分类ID查询，按创建时间倒序 */
+    Page<Study> findByCategoryIdOrderByCreateTimeDesc(Long categoryId, Pageable pageable);
+
+    // 按多个 categoryId 查询
+    Page<Study> findByCategoryIdInOrderByCreateTimeDesc(List<Long> categoryIds, Pageable pageable);
 
     @Modifying
     @Query("UPDATE Study s SET s.likeCount = s.likeCount + 1 WHERE s.id = :id")

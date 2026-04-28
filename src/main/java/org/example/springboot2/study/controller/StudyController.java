@@ -19,8 +19,10 @@ public class StudyController {
     @GetMapping("/list")
     public ResponseEntity<Map<String, Object>> getStudyList(
             @RequestParam(defaultValue = "1") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize) {
-        Map<String, Object> data = studyService.getStudyList(pageNo, pageSize);
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long parentCategoryId) {   // ✅ 新增
+        Map<String, Object> data = studyService.getStudyList(pageNo, pageSize, categoryId, parentCategoryId);
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);
         response.put("data", data);
