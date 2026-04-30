@@ -45,6 +45,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 antMatcher("/api/user/login"),
                                 antMatcher("/api/user/register"),
+                                antMatcher("/api/user/list"),
+                                antMatcher("/api/user/role"),
                                 antMatcher("/api/user/**"),
                                 antMatcher("/api/recommendation/**"),
                                 antMatcher("/api/notice/**"),

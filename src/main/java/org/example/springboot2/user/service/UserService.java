@@ -1,6 +1,8 @@
 package org.example.springboot2.user.service;
 
 import org.example.springboot2.permission.service.PermissionService;
+import org.example.springboot2.role.entity.Role;
+import org.example.springboot2.role.service.RoleService;
 import org.example.springboot2.user.entity.User;
 import org.example.springboot2.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,10 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PermissionService permissionService;   // ✅ 新增
+    private PermissionService permissionService;
+
+    @Autowired
+    private RoleService roleService;   // 新增
 
     // 登录认证
     public User login(String username, String rawPassword) {
@@ -55,15 +60,11 @@ public class UserService {
         return true;
     }
 
-    /**
-     * 用户退出登录，清除数据库中的 token
-     */
+    // 退出登录
     @Transactional
     public boolean logout(String token) {
         User user = userRepository.findByToken(token);
-        if (user == null) {
-            return false;
-        }
+        if (user == null) return false;
         user.setToken(null);
         userRepository.save(user);
         return true;
@@ -72,9 +73,7 @@ public class UserService {
     // 安全检测
     public Map<String, Object> performSecurityCheck(String token) {
         User user = getUserByToken(token);
-        if (user == null) {
-            throw new RuntimeException("用户不存在或 Token 无效");
-        }
+        if (user == null) throw new RuntimeException("用户不存在或 Token 无效");
 
         Map<String, Object> result = new HashMap<>();
         List<Map<String, Object>> items = new ArrayList<>();
@@ -85,8 +84,7 @@ public class UserService {
         pwdItem.put("id", "pwd");
         pwdItem.put("label", "密码安全");
         LocalDateTime pwdUpdateTime = user.getPasswordUpdateTime();
-        long daysSinceUpdate = pwdUpdateTime == null ? 999
-                : ChronoUnit.DAYS.between(pwdUpdateTime, LocalDateTime.now());
+        long daysSinceUpdate = pwdUpdateTime == null ? 999 : ChronoUnit.DAYS.between(pwdUpdateTime, LocalDateTime.now());
         if (daysSinceUpdate > 90) {
             pwdItem.put("result", "超过90天未更换");
             pwdItem.put("status", "warning");
@@ -97,7 +95,7 @@ public class UserService {
         }
         items.add(pwdItem);
 
-        // 2. 权限架构检测（基于角色字符串判断）
+        // 2. 权限架构检测
         Map<String, Object> roleItem = new HashMap<>();
         roleItem.put("id", "role");
         roleItem.put("label", "权限架构");
@@ -111,7 +109,7 @@ public class UserService {
         roleItem.put("status", "success");
         items.add(roleItem);
 
-        // 3. 菜单合规检测（改为动态获取权限）
+        // 3. 菜单合规检测（动态获取权限）
         Map<String, Object> routeItem = new HashMap<>();
         routeItem.put("id", "route");
         routeItem.put("label", "菜单合规");
@@ -154,6 +152,25 @@ public class UserService {
         result.put("items", items);
         result.put("message", totalScore >= 90 ? "账号整体状态良好" : "存在安全隐患，建议优化");
         return result;
+    }
+
+    // 获取所有用户（用于角色管理）
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    // 更新用户角色
+    @Transactional
+    public void updateUserRole(Long userId, Long roleId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("用户不存在"));
+        Role role = roleService.getRoleById(roleId);
+        if (role == null) {
+            throw new RuntimeException("角色不存在");
+        }
+        user.setRoleId(roleId);
+        user.setRole(role.getName());
+        userRepository.save(user);
     }
 
     public User getUserById(Long userId) {

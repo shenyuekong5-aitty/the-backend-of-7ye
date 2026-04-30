@@ -1,6 +1,7 @@
 package org.example.springboot2.user.controller;
 
 import org.example.springboot2.permission.service.PermissionService;
+import org.example.springboot2.role.service.RoleService;
 import org.example.springboot2.user.entity.User;
 import org.example.springboot2.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +12,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private PermissionService permissionService;
 
     @Autowired
-    private UserService userService;
+    private RoleService roleService; // 新增
 
     // 登录
     @PostMapping("/login")
@@ -46,18 +51,16 @@ public class UserController {
         User user = userService.getUserByToken(token);
         Map<String, Object> response = new HashMap<>();
         if (user != null) {
-            // 构建安全的用户信息，不直接返回整个 user 实体
             Map<String, Object> userMap = new HashMap<>();
             userMap.put("username", user.getUsername());
             userMap.put("avatar", user.getAvatar());
-            userMap.put("role", user.getRole());          // 单个角色字符串
+            userMap.put("role", user.getRole());
             userMap.put("userid", user.getId());
             userMap.put("desc", user.getDesc());
             userMap.put("createTime", user.getCreateTime());
 
-            // 关键：动态查询权限
             List<String> permissions = permissionService.getPermissionsByRoleId(user.getRoleId());
-            userMap.put("routes", permissions);           // 保持字段名一致
+            userMap.put("routes", permissions);
 
             response.put("code", 200);
             response.put("data", Map.of("user", userMap));
@@ -67,6 +70,40 @@ public class UserController {
             response.put("data", Map.of("message", "获取用户信息失败"));
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
+    }
+
+    // 获取所有用户（简单版本，用于角色分配表格）
+    @GetMapping("/list")
+    public ResponseEntity<Map<String, Object>> userList() {
+        List<User> users = userService.getAllUsers();
+        List<Map<String, Object>> list = users.stream().map(user -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", user.getId());
+            map.put("username", user.getUsername());
+            map.put("avatar", user.getAvatar());
+            map.put("role", user.getRole());
+            map.put("roleId", user.getRoleId());
+            return map;
+        }).collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("code", 200);
+        response.put("data", list);
+        return ResponseEntity.ok(response);
+    }
+
+    // 修改用户角色
+    @PutMapping("/{userId}/role")
+    public ResponseEntity<Map<String, Object>> updateUserRole(
+            @PathVariable Long userId,
+            @RequestBody Map<String, Long> body) {
+        Long roleId = body.get("roleId");
+        userService.updateUserRole(userId, roleId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("code", 200);
+        response.put("message", "角色更新成功");
+        return ResponseEntity.ok(response);
     }
 
     // 检查用户名是否存在
@@ -110,20 +147,16 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<Map<String, Object>> logout(@RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
-
-        // 从请求头中提取 token（假设格式为 "Bearer <token>"）
         String token = null;
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
         }
-
         if (token == null) {
             response.put("code", 401);
             response.put("message", "缺少认证 token");
             response.put("data", null);
             return ResponseEntity.ok(response);
         }
-
         boolean success = userService.logout(token);
         if (success) {
             response.put("code", 200);
@@ -170,9 +203,7 @@ public class UserController {
         publicInfo.put("avatar", user.getAvatar());
         publicInfo.put("desc", user.getDesc());
         publicInfo.put("role", user.getRole());
-        publicInfo.put("createTime", user.getCreateTime()); // 新增
-        // 不返回密码、token等敏感字段
-
+        publicInfo.put("createTime", user.getCreateTime());
         response.put("code", 200);
         response.put("data", publicInfo);
         return ResponseEntity.ok(response);
