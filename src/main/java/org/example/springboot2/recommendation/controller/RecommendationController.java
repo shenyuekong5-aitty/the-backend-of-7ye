@@ -61,7 +61,7 @@ public class RecommendationController {
     @GetMapping("/pending")
     public ResponseEntity<Map<String, Object>> getPendingList(@RequestHeader("token") String token) {
         User admin = userService.getUserByToken(token);
-        if (admin == null || !admin.getRoles().contains("admin")) {
+        if (admin == null || !"admin".equals(admin.getRole())){
             return ResponseEntity.ok(Map.of("code", 403, "message", "无权限"));
         }
         try {

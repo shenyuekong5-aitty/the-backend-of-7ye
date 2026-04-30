@@ -105,9 +105,9 @@ public class UserService {
         Map<String, Object> roleItem = new HashMap<>();
         roleItem.put("id", "role");
         roleItem.put("label", "权限架构");
-        if (user.getRoles() != null && user.getRoles().contains("admin")) {
+        if ("admin".equals(user.getRole())) {
             roleItem.put("result", "超级管理员 (至尊权限)");
-        }else if(user.getRoles() != null && user.getRoles().contains("friend")){
+        }else if("friend".equals(user.getRole())){
             roleItem.put("result", "朋友 (高权限)");
         }
         else {

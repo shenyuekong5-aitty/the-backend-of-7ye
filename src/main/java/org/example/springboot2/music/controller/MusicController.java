@@ -91,7 +91,7 @@ public class MusicController {
 
     private boolean isAdmin(String token) {
         User user = userService.getUserByToken(token);
-        return user != null && user.getRoles() != null && user.getRoles().contains("admin");
+        return user != null && "admin".equals(user.getRole());
     }
 
     private ResponseEntity<Map<String, Object>> buildMissingTokenResponse() {

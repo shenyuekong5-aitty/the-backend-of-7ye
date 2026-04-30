@@ -133,7 +133,7 @@ public class CommentService {
                 .orElseThrow(() -> new RuntimeException("评论不存在"));
 
         boolean isAuthor = comment.getUserId().equals(currentUser.getId());
-        boolean isAdmin = currentUser.getRoles() != null && currentUser.getRoles().contains("admin");
+        boolean isAdmin = "admin".equals(currentUser.getRole());
 
         if (!isAuthor && !isAdmin) {
             throw new RuntimeException("无权修改他人评论");
@@ -152,7 +152,7 @@ public class CommentService {
                 .orElseThrow(() -> new RuntimeException("评论不存在"));
 
         boolean isAuthor = comment.getUserId().equals(currentUser.getId());
-        boolean isAdmin = currentUser.getRoles() != null && currentUser.getRoles().contains("admin");
+        boolean isAdmin = "admin".equals(currentUser.getRole());
 
         if (!isAuthor && !isAdmin) {
             throw new RuntimeException("无权删除他人评论");

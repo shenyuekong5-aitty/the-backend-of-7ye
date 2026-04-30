@@ -44,7 +44,7 @@ public class RecommendationService {
     @Transactional
     public Recommendation submit(String token, String type, Map<String, Object> contentMap) {
         User user = userService.getUserByToken(token);
-        if (user == null || !user.getRoles().contains("friend")) {
+        if ("friend".equals(user.getRole())) {
             throw new RuntimeException("无权限");
         }
         try {
@@ -65,7 +65,7 @@ public class RecommendationService {
     @Transactional
     public void approve(String token, Long recId) {
         User admin = userService.getUserByToken(token);
-        if (admin == null || !admin.getRoles().contains("admin")) {
+        if (!"admin".equals(admin.getRole())) {
             throw new RuntimeException("无权限");
         }
         Recommendation rec = recommendationRepository.findById(recId)
@@ -116,7 +116,7 @@ public class RecommendationService {
     @Transactional
     public void reject(String token, Long recId, String comment) {
         User admin = userService.getUserByToken(token);
-        if (admin == null || !admin.getRoles().contains("admin")) {
+        if (!"admin".equals(admin.getRole())) {
             throw new RuntimeException("无权限");
         }
         Recommendation rec = recommendationRepository.findById(recId)

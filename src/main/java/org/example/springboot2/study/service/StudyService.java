@@ -89,7 +89,7 @@ public class StudyService {
         Study existing = studyRepository.findById(study.getId())
                 .orElseThrow(() -> new RuntimeException("学习条目不存在"));
 
-        boolean isAdmin = user.getRoles() != null && user.getRoles().contains("admin");
+        boolean isAdmin = user.getRole() != null && user.getRole().contains("admin");
         boolean isAuthor = existing.getAuthorId().equals(user.getId());
         if (!isAdmin && !isAuthor) {
             throw new RuntimeException("无权修改他人创建的学习条目");
@@ -118,7 +118,7 @@ public class StudyService {
         Study existing = studyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("学习条目不存在"));
 
-        boolean isAdmin = user.getRoles() != null && user.getRoles().contains("admin");
+        boolean isAdmin = user.getRole() != null && user.getRole().contains("admin");
         boolean isAuthor = existing.getAuthorId().equals(user.getId());
         if (!isAdmin && !isAuthor) {
             throw new RuntimeException("无权删除他人创建的学习条目");

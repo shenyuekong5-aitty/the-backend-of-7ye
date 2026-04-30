@@ -107,9 +107,9 @@ public class NicknameController {
         if (token == null) return false;
         User user = userService.getUserByToken(token);
         if (user == null) return false;
-        String roles = user.getRoles();
+        String role = user.getRole();
         // roles 可能是 "admin" 或 "[\"admin\"]"，简单判断包含即可
-        return roles != null && roles.contains("admin");
+        return "admin".equals(role);
     }
 
     // ✅ 构建未授权响应

@@ -151,7 +151,7 @@ public class UserController {
         publicInfo.put("username", user.getUsername());
         publicInfo.put("avatar", user.getAvatar());
         publicInfo.put("desc", user.getDesc());
-        publicInfo.put("roles", user.getRoles());
+        publicInfo.put("role", user.getRole());
         publicInfo.put("createTime", user.getCreateTime()); // 新增
         // 不返回密码、token等敏感字段
 

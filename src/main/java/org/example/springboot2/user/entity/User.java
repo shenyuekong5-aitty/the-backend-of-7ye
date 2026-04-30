@@ -19,7 +19,7 @@ public class User {
 
     private String avatar;
 
-    @Column(name = "`desc`")
+    @Column(name = "desc")
     private String desc;
 
     @Column(name = "password_update_time")
@@ -35,7 +35,7 @@ public class User {
     }
 
 
-    private String roles;
+    private String role;
     private String routes;
     private String token;
 
@@ -58,8 +58,8 @@ public class User {
     public String getDesc() { return desc; }
     public void setDesc(String desc) { this.desc = desc; }
 
-    public String getRoles() { return roles; }
-    public void setRoles(String roles) { this.roles = roles; }
+    public String getRole() { return role; }
+    public void setRoles(String role) { this.role = role; }
 
     public String getRoutes() { return routes; }
     public void setRoutes(String routes) { this.routes = routes; }

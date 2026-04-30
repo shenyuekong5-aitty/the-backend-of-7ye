@@ -62,7 +62,7 @@ public class CognizeService {
         Cognize existing = cognizeRepository.findById(cognize.getId())
                 .orElseThrow(() -> new RuntimeException("认知条目不存在"));
 
-        boolean isAdmin = user.getRoles() != null && user.getRoles().contains("admin");
+        boolean isAdmin = "admin".equals(user.getRole());
         boolean isAuthor = existing.getAuthorId().equals(user.getId());
         if (!isAdmin && !isAuthor) {
             throw new RuntimeException("无权修改他人的认知条目");
@@ -83,7 +83,7 @@ public class CognizeService {
         Cognize existing = cognizeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("认知条目不存在"));
 
-        boolean isAdmin = user.getRoles() != null && user.getRoles().contains("admin");
+        boolean isAdmin = "admin".equals(user.getRole());
         boolean isAuthor = existing.getAuthorId().equals(user.getId());
         if (!isAdmin && !isAuthor) {
             throw new RuntimeException("无权删除他人的认知条目");
