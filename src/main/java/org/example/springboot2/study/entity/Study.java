@@ -67,6 +67,9 @@ public class Study {
         updateTime = LocalDateTime.now();
     }
 
+    @Column(name = "template_type", length = 20)
+    private String templateType = "tech";
+
     // ===================== Getter / Setter =====================
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -94,4 +97,7 @@ public class Study {
     public void setCreateTime(LocalDateTime createTime) { this.createTime = createTime; }
     public LocalDateTime getUpdateTime() { return updateTime; }
     public void setUpdateTime(LocalDateTime updateTime) { this.updateTime = updateTime; }
+
+    public String getTemplateType() {return templateType;}
+    public void setTemplateType(String templateType) {this.templateType = templateType;}
 }
