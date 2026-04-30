@@ -1,0 +1,22 @@
+package org.example.springboot2.permission.repository;
+
+import org.example.springboot2.permission.entity.RolePermission;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import java.util.List;
+
+@Repository
+public interface RolePermissionRepository extends JpaRepository<RolePermission, Long> {
+
+    List<RolePermission> findByRoleId(Long roleId);
+
+    @Modifying
+    @Query("DELETE FROM RolePermission rp WHERE rp.roleId = :roleId")
+    void deleteByRoleId(@Param("roleId") Long roleId);
+
+    @Query("SELECT DISTINCT rp.permission FROM RolePermission rp")
+    List<String> findAllDistinctPermissions();
+}

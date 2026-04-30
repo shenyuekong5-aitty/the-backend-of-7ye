@@ -1,6 +1,6 @@
 package org.example.springboot2.user.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.springboot2.permission.service.PermissionService;
 import org.example.springboot2.user.entity.User;
 import org.example.springboot2.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -24,7 +21,8 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private PermissionService permissionService;   // ✅ 新增
 
     // 登录认证
     public User login(String username, String rawPassword) {
@@ -45,22 +43,20 @@ public class UserService {
         return userRepository.existsByUsername(username);
     }
 
-    // 修改密码（自动更新 password_update_time）
+    // 修改密码
     @Transactional
     public boolean changePassword(String username, String oldPassword, String newPassword) {
         User user = userRepository.findByUsername(username);
         if (user == null) return false;
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) return false;
         user.setPassword(passwordEncoder.encode(newPassword));
-        user.setPasswordUpdateTime(LocalDateTime.now());   // ✅ 关键：更新密码修改时间
+        user.setPasswordUpdateTime(LocalDateTime.now());
         userRepository.save(user);
         return true;
     }
 
     /**
      * 用户退出登录，清除数据库中的 token
-     * @param token 当前请求携带的 token
-     * @return 是否成功
      */
     @Transactional
     public boolean logout(String token) {
@@ -101,31 +97,28 @@ public class UserService {
         }
         items.add(pwdItem);
 
-        // 2. 权限架构检测
+        // 2. 权限架构检测（基于角色字符串判断）
         Map<String, Object> roleItem = new HashMap<>();
         roleItem.put("id", "role");
         roleItem.put("label", "权限架构");
         if ("admin".equals(user.getRole())) {
             roleItem.put("result", "超级管理员 (至尊权限)");
-        }else if("friend".equals(user.getRole())){
+        } else if ("friend".equals(user.getRole())) {
             roleItem.put("result", "朋友 (高权限)");
-        }
-        else {
+        } else {
             roleItem.put("result", "普通用户");
         }
         roleItem.put("status", "success");
         items.add(roleItem);
 
-        // 3. 菜单合规检测
+        // 3. 菜单合规检测（改为动态获取权限）
         Map<String, Object> routeItem = new HashMap<>();
         routeItem.put("id", "route");
         routeItem.put("label", "菜单合规");
         int routeCount = 0;
-        if (user.getRoutes() != null && !user.getRoutes().isEmpty()) {
-            try {
-                List<?> routes = objectMapper.readValue(user.getRoutes(), List.class);
-                routeCount = routes.size();
-            } catch (Exception ignored) {}
+        if (user.getRoleId() != null) {
+            List<String> permissions = permissionService.getPermissionsByRoleId(user.getRoleId());
+            routeCount = permissions.size();
         }
         if (routeCount > 10) {
             routeItem.put("result", "功能完整");

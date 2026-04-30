@@ -62,6 +62,8 @@ public class SecurityConfig {
                                 antMatcher("/api/favorite/**"),
                                 antMatcher("/api/like/**"),          // ✅ 新增通用点赞模块
                                 antMatcher("/api/view/**"),
+                                antMatcher("/api/role/**"),
+                                antMatcher("/api/permission/**"),
                                 antMatcher("/ws/**")
                         ).permitAll()
                         .requestMatchers(antMatcher("/static/**"), antMatcher("/favicon.ico"), antMatcher("/error"), antMatcher("/assets/**")).permitAll()

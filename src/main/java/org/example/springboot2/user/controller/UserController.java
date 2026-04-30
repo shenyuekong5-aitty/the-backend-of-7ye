@@ -1,5 +1,6 @@
 package org.example.springboot2.user.controller;
 
+import org.example.springboot2.permission.service.PermissionService;
 import org.example.springboot2.user.entity.User;
 import org.example.springboot2.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+
+    @Autowired
+    private PermissionService permissionService;
 
     @Autowired
     private UserService userService;
@@ -41,8 +46,21 @@ public class UserController {
         User user = userService.getUserByToken(token);
         Map<String, Object> response = new HashMap<>();
         if (user != null) {
+            // 构建安全的用户信息，不直接返回整个 user 实体
+            Map<String, Object> userMap = new HashMap<>();
+            userMap.put("username", user.getUsername());
+            userMap.put("avatar", user.getAvatar());
+            userMap.put("role", user.getRole());          // 单个角色字符串
+            userMap.put("userid", user.getId());
+            userMap.put("desc", user.getDesc());
+            userMap.put("createTime", user.getCreateTime());
+
+            // 关键：动态查询权限
+            List<String> permissions = permissionService.getPermissionsByRoleId(user.getRoleId());
+            userMap.put("routes", permissions);           // 保持字段名一致
+
             response.put("code", 200);
-            response.put("data", Map.of("user", user));
+            response.put("data", Map.of("user", userMap));
             return ResponseEntity.ok(response);
         } else {
             response.put("code", 201);
