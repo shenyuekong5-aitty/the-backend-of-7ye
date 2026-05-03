@@ -1,7 +1,6 @@
 package org.example.springboot2.user.service;
 
 import org.example.springboot2.permission.service.PermissionService;
-import org.example.springboot2.qrlogin.service.QrLoginService;          // 新增导入
 import org.example.springboot2.role.entity.Role;
 import org.example.springboot2.role.service.RoleService;
 import org.example.springboot2.sms.service.SmsService;
@@ -34,8 +33,18 @@ public class UserService {
     @Autowired
     private SmsService smsService;
 
-    @Autowired
-    private QrLoginService qrLoginService;   // 注入扫码登录服务
+    // 不再注入 QrLoginService
+
+    /**
+     * 为用户生成新的 token 并设置过期时间（30天）
+     */
+    private String generateAndSetToken(User user) {
+        String token = UUID.randomUUID().toString();
+        user.setToken(token);
+        user.setTokenExpireTime(LocalDateTime.now().plusDays(30));
+        userRepository.save(user);
+        return token;
+    }
 
     /**
      * 登录认证（支持用户名或手机号）
@@ -48,32 +57,31 @@ public class UserService {
             user = userRepository.findByUsername(account);
         }
         if (user != null && passwordEncoder.matches(rawPassword, user.getPassword())) {
+            generateAndSetToken(user);
             return user;
         }
         return null;
     }
 
-    // 根据 token 获取用户（先查数据库，再查临时扫码 token）
+    /**
+     * 根据 token 获取用户（无临时token逻辑）
+     */
     public User getUserByToken(String token) {
-        // 先查数据库
         User user = userRepository.findByToken(token);
         if (user != null) {
+            if (user.getTokenExpireTime() != null
+                    && user.getTokenExpireTime().isBefore(LocalDateTime.now())) {
+                return null;
+            }
             return user;
-        }
-        // 查扫码登录的临时 token
-        Long userId = qrLoginService.getUserIdByTemporaryToken(token);
-        if (userId != null) {
-            return userRepository.findById(userId).orElse(null);
         }
         return null;
     }
 
-    // 检查用户名是否存在
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
 
-    // 修改密码
     @Transactional
     public boolean changePassword(String username, String oldPassword, String newPassword) {
         User user = userRepository.findByUsername(username);
@@ -85,36 +93,111 @@ public class UserService {
         return true;
     }
 
-    // 退出登录
     @Transactional
     public boolean logout(String token) {
         User user = userRepository.findByToken(token);
         if (user == null) return false;
         user.setToken(null);
+        user.setTokenExpireTime(null);
         userRepository.save(user);
         return true;
     }
 
-    // 安全检测
+    // ✅ 完整的安全检测方法
     public Map<String, Object> performSecurityCheck(String token) {
-        // ... 保持不变，限于篇幅省略，您原有的代码完全可用 ...
-        return new HashMap<>(); // 占位，请替换为您的原始代码
+        User user = getUserByToken(token);
+        if (user == null) throw new RuntimeException("用户不存在或 Token 无效");
+
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> items = new ArrayList<>();
+        int totalScore = 100;
+
+        // 1. 密码安全检测
+        Map<String, Object> pwdItem = new HashMap<>();
+        pwdItem.put("id", "pwd");
+        pwdItem.put("label", "密码安全");
+        LocalDateTime pwdUpdateTime = user.getPasswordUpdateTime();
+        long daysSinceUpdate = pwdUpdateTime == null ? 999
+                : ChronoUnit.DAYS.between(pwdUpdateTime, LocalDateTime.now());
+        if (daysSinceUpdate > 90) {
+            pwdItem.put("result", "超过90天未更换");
+            pwdItem.put("status", "warning");
+            totalScore -= 15;
+        } else {
+            pwdItem.put("result", "正常");
+            pwdItem.put("status", "success");
+        }
+        items.add(pwdItem);
+
+        // 2. 权限架构检测
+        Map<String, Object> roleItem = new HashMap<>();
+        roleItem.put("id", "role");
+        roleItem.put("label", "权限架构");
+        if ("admin".equals(user.getRole())) {
+            roleItem.put("result", "超级管理员 (至尊权限)");
+        } else if ("friend".equals(user.getRole())) {
+            roleItem.put("result", "朋友 (高权限)");
+        } else {
+            roleItem.put("result", "普通用户");
+        }
+        roleItem.put("status", "success");
+        items.add(roleItem);
+
+        // 3. 菜单合规检测
+        Map<String, Object> routeItem = new HashMap<>();
+        routeItem.put("id", "route");
+        routeItem.put("label", "菜单合规");
+        int routeCount = 0;
+        if (user.getRoleId() != null) {
+            List<String> permissions = permissionService.getPermissionsByRoleId(user.getRoleId());
+            routeCount = permissions.size();
+        }
+        if (routeCount > 10) {
+            routeItem.put("result", "功能完整");
+            routeItem.put("status", "success");
+        } else {
+            routeItem.put("result", "功能受限");
+            routeItem.put("status", "warning");
+            totalScore -= 10;
+        }
+        items.add(routeItem);
+
+        // 4. 资料完整度
+        Map<String, Object> infoItem = new HashMap<>();
+        infoItem.put("id", "info");
+        infoItem.put("label", "资料完整度");
+        boolean hasAvatar = user.getAvatar() != null && !user.getAvatar().isEmpty();
+        boolean hasDesc = user.getDesc() != null && !user.getDesc().isEmpty();
+        if (hasAvatar && hasDesc) {
+            infoItem.put("result", "已完善");
+            infoItem.put("status", "success");
+        } else if (hasAvatar || hasDesc) {
+            infoItem.put("result", "部分完善");
+            infoItem.put("status", "warning");
+            totalScore -= 5;
+        } else {
+            infoItem.put("result", "未完善");
+            infoItem.put("status", "warning");
+            totalScore -= 10;
+        }
+        items.add(infoItem);
+
+        result.put("score", Math.max(totalScore, 0));
+        result.put("items", items);
+        result.put("message", totalScore >= 90 ? "账号整体状态良好" : "存在安全隐患，建议优化");
+        return result;
     }
 
-    // 获取所有用户
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    // 更新用户角色
     @Transactional
     public void updateUserRole(Long userId, Long roleId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("用户不存在"));
         Role role = roleService.getRoleById(roleId);
-        if (role == null) {
-            throw new RuntimeException("角色不存在");
-        }
+        if (role == null) throw new RuntimeException("角色不存在");
         user.setRoleId(roleId);
         user.setRole(role.getName());
         userRepository.save(user);
@@ -128,20 +211,11 @@ public class UserService {
         return userRepository.countByRoleId(roleId);
     }
 
-    /**
-     * 手机号注册（支持自定义账号、密码和昵称）
-     */
     @Transactional
     public User registerByPhone(String username, String phone, String code, String password, String nickname) {
-        if (!smsService.verifyCode(phone, code)) {
-            throw new RuntimeException("验证码错误或已过期");
-        }
-        if (userRepository.existsByPhone(phone)) {
-            throw new RuntimeException("手机号已注册");
-        }
-        if (userRepository.existsByUsername(username)) {
-            throw new RuntimeException("账号已存在，请更换");
-        }
+        if (!smsService.verifyCode(phone, code)) throw new RuntimeException("验证码错误或已过期");
+        if (userRepository.existsByPhone(phone)) throw new RuntimeException("手机号已注册");
+        if (userRepository.existsByUsername(username)) throw new RuntimeException("账号已存在，请更换");
 
         User user = new User();
         user.setUsername(username);
@@ -150,22 +224,15 @@ public class UserService {
         user.setNickname(nickname != null && !nickname.isBlank() ? nickname : username);
         user.setRole("common");
         user.setRoleId(3L);
-
-        String token = UUID.randomUUID().toString();
-        user.setToken(token);
-        userRepository.save(user);
+        generateAndSetToken(user);
         return user;
     }
 
     @Transactional
     public void resetPassword(String phone, String code, String newPassword) {
-        if (!smsService.verifyCode(phone, code)) {
-            throw new RuntimeException("验证码错误或已过期");
-        }
+        if (!smsService.verifyCode(phone, code)) throw new RuntimeException("验证码错误或已过期");
         User user = userRepository.findByPhone(phone);
-        if (user == null) {
-            throw new RuntimeException("手机号未注册");
-        }
+        if (user == null) throw new RuntimeException("手机号未注册");
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }

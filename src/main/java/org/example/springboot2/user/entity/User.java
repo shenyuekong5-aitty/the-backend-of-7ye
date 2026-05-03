@@ -41,6 +41,9 @@ public class User {
     @Column(unique = true, length = 20)
     private String phone;
 
+    @Column(name = "token_expire_time")
+    private LocalDateTime tokenExpireTime;
+
     public User() {}
 
     @PrePersist
@@ -143,4 +146,8 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public LocalDateTime getTokenExpireTime() { return tokenExpireTime; }
+
+    public void setTokenExpireTime(LocalDateTime tokenExpireTime) { this.tokenExpireTime = tokenExpireTime; }
 }
