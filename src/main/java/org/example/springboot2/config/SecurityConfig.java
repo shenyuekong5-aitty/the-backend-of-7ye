@@ -14,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,11 +34,25 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // ✅ 新增 CORS 配置（开发阶段允许所有来源）
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOriginPattern("*");   // 允许所有来源
+        config.addAllowedMethod("*");          // 允许所有 HTTP 方法
+        config.addAllowedHeader("*");          // 允许所有请求头
+        config.setAllowCredentials(false);     // 使用 token 认证，无需 cookie
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> {})
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))   // ✅ 使用上面定义的 CORS 配置
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
@@ -48,6 +65,7 @@ public class SecurityConfig {
                                 antMatcher("/api/user/list"),
                                 antMatcher("/api/user/role"),
                                 antMatcher("/api/user/**"),
+                                antMatcher("/api/sms/**"),
                                 antMatcher("/api/recommendation/**"),
                                 antMatcher("/api/notice/**"),
                                 antMatcher("/api/book/**"),
@@ -62,11 +80,15 @@ public class SecurityConfig {
                                 antMatcher("/api/comment/**"),
                                 antMatcher("/api/study/**"),
                                 antMatcher("/api/favorite/**"),
-                                antMatcher("/api/like/**"),          // ✅ 新增通用点赞模块
+                                antMatcher("/api/like/**"),
                                 antMatcher("/api/view/**"),
                                 antMatcher("/api/role/**"),
                                 antMatcher("/api/permission/**"),
-                                antMatcher("/ws/**")
+                                antMatcher("/api/user/register-by-phone"),
+                                antMatcher("/api/user/reset-password"),
+                                antMatcher("/api/user/check-phone"),
+                                antMatcher("/ws/**"),
+                                antMatcher("/api/qrlogin/**")
                         ).permitAll()
                         .requestMatchers(antMatcher("/static/**"), antMatcher("/favicon.ico"), antMatcher("/error"), antMatcher("/assets/**")).permitAll()
                         .anyRequest().authenticated()

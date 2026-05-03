@@ -25,14 +25,14 @@ public class UserController {
     private PermissionService permissionService;
 
     @Autowired
-    private RoleService roleService; // 新增
+    private RoleService roleService;
 
     // 登录
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> loginParams) {
-        String username = loginParams.get("username");
+        String account = loginParams.get("username");
         String password = loginParams.get("password");
-        User user = userService.login(username, password);
+        User user = userService.login(account, password);
         Map<String, Object> response = new HashMap<>();
         if (user != null) {
             response.put("code", 200);
@@ -54,6 +54,7 @@ public class UserController {
             Map<String, Object> userMap = new HashMap<>();
             userMap.put("username", user.getUsername());
             userMap.put("avatar", user.getAvatar());
+            userMap.put("nickname", user.getNickname());   // 新增昵称
             userMap.put("role", user.getRole());
             userMap.put("userid", user.getId());
             userMap.put("desc", user.getDesc());
@@ -72,9 +73,10 @@ public class UserController {
         }
     }
 
-    // 获取所有用户（简单版本，用于角色分配表格）
+    // 获取所有用户（用于角色分配表格）
     @GetMapping("/list")
     public ResponseEntity<Map<String, Object>> userList() {
+        // 保持原样即可，如需展示昵称可自行添加
         List<User> users = userService.getAllUsers();
         List<Map<String, Object>> list = users.stream().map(user -> {
             Map<String, Object> map = new HashMap<>();
@@ -99,7 +101,6 @@ public class UserController {
             @RequestBody Map<String, Long> body) {
         Long roleId = body.get("roleId");
         userService.updateUserRole(userId, roleId);
-
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);
         response.put("message", "角色更新成功");
@@ -202,10 +203,62 @@ public class UserController {
         publicInfo.put("username", user.getUsername());
         publicInfo.put("avatar", user.getAvatar());
         publicInfo.put("desc", user.getDesc());
+        publicInfo.put("nickname", user.getNickname());   // 新增
         publicInfo.put("role", user.getRole());
         publicInfo.put("createTime", user.getCreateTime());
         response.put("code", 200);
         response.put("data", publicInfo);
+        return ResponseEntity.ok(response);
+    }
+
+    // 手机号注册（接收账号、密码、昵称）
+    @PostMapping("/register-by-phone")
+    public ResponseEntity<Map<String, Object>> registerByPhone(@RequestBody Map<String, String> body) {
+        String username = body.get("username");
+        String phone = body.get("phone");
+        String code = body.get("code");
+        String password = body.get("password");
+        String nickname = body.get("nickname");
+
+        if (username == null || phone == null || code == null || password == null) {
+            return ResponseEntity.badRequest().body(Map.of("code", 400, "message", "参数不完整"));
+        }
+        try {
+            User user = userService.registerByPhone(username, phone, code, password, nickname);
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("code", 200);
+            resp.put("data", Map.of("token", user.getToken(), "userId", user.getId()));
+            resp.put("message", "注册成功");
+            return ResponseEntity.ok(resp);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("code", 400, "message", e.getMessage()));
+        }
+    }
+    //根据手机号验证码设置密码
+    @PostMapping("/reset-password")
+    public ResponseEntity<Map<String, Object>> resetPassword(@RequestBody Map<String, String> body) {
+        String phone = body.get("phone");
+        String code = body.get("code");
+        String newPassword = body.get("newPassword");
+
+        if (phone == null || code == null || newPassword == null) {
+            return ResponseEntity.badRequest().body(Map.of("code", 400, "message", "参数不完整"));
+        }
+        try {
+            userService.resetPassword(phone, code, newPassword);
+            return ResponseEntity.ok(Map.of("code", 200, "message", "密码重置成功"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("code", 400, "message", e.getMessage()));
+        }
+    }
+    //检查手机号是否已经注册
+    @GetMapping("/check-phone")
+    public ResponseEntity<Map<String, Object>> checkPhone(@RequestParam String phone) {
+        boolean exists = userService.existsByPhone(phone);
+        Map<String, Object> response = new HashMap<>();
+        response.put("code", 200);
+        response.put("data", Map.of("exists", exists));
+        response.put("message", exists ? "手机号已注册" : "手机号可用");
         return ResponseEntity.ok(response);
     }
 }
