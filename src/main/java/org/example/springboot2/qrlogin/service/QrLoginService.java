@@ -44,14 +44,19 @@ public class QrLoginService {
         if (session != null && !session.isExpired() && "WAITING".equals(session.getStatus())) {
             session.setStatus("CONFIRMED");
             session.setUserId(userId);
-            String pcToken = UUID.randomUUID().toString();
-            session.setPcToken(pcToken);
 
-            // ✅ 直接写入用户表，和密码登录完全一样
+            // 直接使用用户当前有效的 token（手机端 token）
             User user = userRepository.findById(userId).orElse(null);
-            if (user != null) {
-                user.setToken(pcToken);
-                userRepository.save(user);
+            if (user != null && user.getToken() != null) {
+                session.setPcToken(user.getToken());   // 复用已有 token
+            } else {
+                // 兜底：用户没有 token 时生成新的（极少情况）
+                String pcToken = UUID.randomUUID().toString();
+                session.setPcToken(pcToken);
+                if (user != null) {
+                    user.setToken(pcToken);
+                    userRepository.save(user);
+                }
             }
         }
     }
