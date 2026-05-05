@@ -49,6 +49,13 @@ public class UserController {
     // 获取当前用户信息
     @GetMapping("/info")
     public ResponseEntity<Map<String, Object>> getUserInfo(@RequestHeader("token") String token) {
+        if (token == null || token.isEmpty()) {
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("code", 401);
+            resp.put("message", "未登录，请重新登录");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resp);
+        }
+
         User user = userService.getUserByToken(token);
         Map<String, Object> response = new HashMap<>();
         if (user != null) {
@@ -58,6 +65,7 @@ public class UserController {
             userMap.put("nickname", user.getNickname());   // 新增昵称
             userMap.put("role", user.getRole());
             userMap.put("userid", user.getId());
+            userMap.put("phone", user.getPhone());
             userMap.put("desc", user.getDesc());
             userMap.put("createTime", user.getCreateTime());
 
