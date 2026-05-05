@@ -303,4 +303,31 @@ public class UserService {
     public void updateUser(User user) {
         userRepository.save(user);
     }
+
+    //修改资料
+    @Transactional
+    public User updateProfile(Long userId, String nickname, String avatar, String phone) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("用户不存在"));
+
+        // 昵称
+        if (nickname != null && !nickname.isBlank()) {
+            user.setNickname(nickname);
+        }
+
+        // 头像（Base64）
+        if (avatar != null && !avatar.isEmpty()) {
+            user.setAvatar(avatar);
+        }
+
+        // 手机号：需检查是否被其他活跃用户占用
+        if (phone != null && !phone.isBlank() && !phone.equals(user.getPhone())) {
+            if (userRepository.existsByPhoneAndStatusNot(phone, "DELETED")) {
+                throw new RuntimeException("手机号已被其他用户使用");
+            }
+            user.setPhone(phone);
+        }
+
+        return userRepository.save(user);
+    }
 }

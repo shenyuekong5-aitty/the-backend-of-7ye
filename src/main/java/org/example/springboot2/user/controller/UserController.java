@@ -119,6 +119,36 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+
+    // 修改资料
+    @PutMapping("/profile")
+    public ResponseEntity<Map<String, Object>> updateProfile(
+            @RequestHeader("token") String token,
+            @RequestBody Map<String, String> body) {
+        User currentUser = userService.getUserByToken(token);
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+                    "code", 401,
+                    "message", "未登录"
+            ));
+        }
+
+        String nickname = body.get("nickname");
+        String avatar = body.get("avatar");
+        String phone = body.get("phone");
+
+        try {
+            User updated = userService.updateProfile(currentUser.getId(), nickname, avatar, phone);
+            Map<String, Object> userMap = new HashMap<>();
+            userMap.put("nickname", updated.getNickname());
+            userMap.put("avatar", updated.getAvatar());
+            userMap.put("phone", updated.getPhone());
+            return ResponseEntity.ok(Map.of("code", 200, "data", userMap, "message", "资料更新成功"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("code", 400, "message", e.getMessage()));
+        }
+    }
+
     // 修改密码
     @PostMapping("/change-password")
     public ResponseEntity<Map<String, Object>> changePassword(
