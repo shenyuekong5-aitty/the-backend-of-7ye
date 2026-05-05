@@ -55,18 +55,11 @@ public class UserController {
             Map<String, Object> userMap = new HashMap<>();
             userMap.put("username", user.getUsername());
             userMap.put("avatar", user.getAvatar());
-            userMap.put("nickname", user.getNickname());
+            userMap.put("nickname", user.getNickname());   // 新增昵称
             userMap.put("role", user.getRole());
             userMap.put("userid", user.getId());
             userMap.put("desc", user.getDesc());
             userMap.put("createTime", user.getCreateTime());
-
-            // ✅ 在这里添加 isDeleted 标识
-            if ("DELETED".equals(user.getStatus())) {
-                userMap.put("isDeleted", true);
-            } else {
-                userMap.put("isDeleted", false);
-            }
 
             List<String> permissions = permissionService.getPermissionsByRoleId(user.getRoleId());
             userMap.put("routes", permissions);
@@ -80,6 +73,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
+
     // 获取所有用户（用于角色分配表格）
     @GetMapping("/list")
     public ResponseEntity<Map<String, Object>> userList() {
@@ -237,12 +231,13 @@ public class UserController {
         String code = body.get("code");
         String password = body.get("password");
         String nickname = body.get("nickname");
+        String avatar = body.get("avatar");
 
         if (username == null || phone == null || code == null || password == null) {
             return ResponseEntity.badRequest().body(Map.of("code", 400, "message", "参数不完整"));
         }
         try {
-            User user = userService.registerByPhone(username, phone, code, password, nickname);
+            User user = userService.registerByPhone(username, phone, code, password, nickname,avatar);
             Map<String, Object> resp = new HashMap<>();
             resp.put("code", 200);
             resp.put("data", Map.of("token", user.getToken(), "userId", user.getId()));
@@ -272,7 +267,7 @@ public class UserController {
     //检查手机号是否已经注册
     @GetMapping("/check-phone")
     public ResponseEntity<Map<String, Object>> checkPhone(@RequestParam String phone) {
-        boolean exists = userService.existsByPhone(phone);
+        boolean exists = userService.existsByActivePhone(phone);
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);
         response.put("data", Map.of("exists", exists));

@@ -221,23 +221,59 @@ public class UserService {
         return userRepository.countByRoleId(roleId);
     }
 
-    @Transactional
-    public User registerByPhone(String username, String phone, String code, String password, String nickname) {
-        if (!smsService.verifyCode(phone, code)) throw new RuntimeException("验证码错误或已过期");
-        if (userRepository.existsByPhone(phone)) throw new RuntimeException("手机号已注册");
-        if (userRepository.existsByUsername(username)) throw new RuntimeException("账号已存在，请更换");
+    /**
+     * 检查手机号是否被活跃（非注销）用户注册
+     */
+    public boolean existsByActivePhone(String phone) {
+        return userRepository.existsByPhoneAndStatusNot(phone, "DELETED");
+    }
 
-        User user = new User();
+    @Transactional
+    public User registerByPhone(String username, String phone, String code, String password, String nickname, String avatar) {
+        if (!smsService.verifyCode(phone, code)) {
+            throw new RuntimeException("验证码错误或已过期");
+        }
+
+        // 1. 检查手机号是否被活跃用户占用（已注销的不算）
+        if (userRepository.existsByPhoneAndStatusNot(phone, "DELETED")) {
+            throw new RuntimeException("手机号已注册");
+        }
+
+        // 2. 检查用户名是否被活跃用户占用（已注销的不算）
+        if (userRepository.existsByUsernameAndStatusNot(username, "DELETED")) {
+            throw new RuntimeException("账号已存在，请更换");
+        }
+
+        // 3. 尝试寻找已注销的同名用户或同手机号用户，准备复用
+        User existingUser = userRepository.findByUsernameAndStatus(username, "DELETED");
+        if (existingUser == null) {
+            existingUser = userRepository.findByPhoneAndStatus(phone, "DELETED");
+        }
+
+        User user;
+        if (existingUser != null) {
+            // 复用已注销的用户记录，更新所有字段
+            user = existingUser;
+            user.setStatus("ACTIVE");
+            user.setDeletedAt(null);
+        } else {
+            // 全新的用户
+            user = new User();
+            user.setRole("common");
+            user.setRoleId(3L);
+        }
+
         user.setUsername(username);
         user.setPhone(phone);
         user.setPassword(passwordEncoder.encode(password));
         user.setNickname(nickname != null && !nickname.isBlank() ? nickname : username);
-        user.setRole("common");
-        user.setRoleId(3L);
+        if (avatar != null && !avatar.isEmpty()) {
+            user.setAvatar(avatar);
+        }
+
         generateAndSetToken(user);
         return user;
     }
-
     @Transactional
     public void resetPassword(String phone, String code, String newPassword) {
         if (!smsService.verifyCode(phone, code)) throw new RuntimeException("验证码错误或已过期");
@@ -260,6 +296,11 @@ public class UserService {
         user.setToken(null);                     // 清除 token，立即退出
         user.setTokenExpireTime(null);           // 清除过期时间
         user.setDeletedAt(LocalDateTime.now());  // 记录注销时间
+        userRepository.save(user);
+    }
+
+    //更新头像
+    public void updateUser(User user) {
         userRepository.save(user);
     }
 }

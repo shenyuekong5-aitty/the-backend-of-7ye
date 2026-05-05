@@ -17,6 +17,7 @@ public class User {
     @Column(nullable = false, length = 100)
     private String password;
 
+    @Column(columnDefinition = "TEXT")
     private String avatar;
 
     @Column(name = "`desc`")

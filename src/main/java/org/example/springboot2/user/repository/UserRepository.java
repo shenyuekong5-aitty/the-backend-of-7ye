@@ -17,6 +17,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String username);
     boolean existsByPhone(String phone);
 
+    boolean existsByPhoneAndStatusNot(String phone, String status);
+
+    boolean existsByUsernameAndStatusNot(String username, String status);
+
+    User findByUsernameAndStatus(String username, String status);
+    User findByPhoneAndStatus(String phone, String status);
+
     long countByRoleId(Long roleId);
     List<User> findByStatusAndDeletedAtBefore(String status, LocalDateTime deletedAt);
 }
