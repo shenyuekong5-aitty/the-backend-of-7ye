@@ -57,10 +57,14 @@ public class UserService {
             user = userRepository.findByUsername(account);
         }
         if (user != null && passwordEncoder.matches(rawPassword, user.getPassword())) {
+            // ✅ 检查是否已注销
+            if ("DELETED".equals(user.getStatus())) {
+                throw new RuntimeException("该账号已注销，无法登录");
+            }
             generateAndSetToken(user);
             return user;
         }
-        return null;
+        throw new RuntimeException("账号或密码不正确");
     }
 
     /**
@@ -69,6 +73,9 @@ public class UserService {
     public User getUserByToken(String token) {
         User user = userRepository.findByToken(token);
         if (user != null) {
+            if ("DELETED".equals(user.getStatus())) {
+                return null;   // 已注销用户返回 null，前端会提示未登录
+            }
             if (user.getTokenExpireTime() != null
                     && user.getTokenExpireTime().isBefore(LocalDateTime.now())) {
                 return null;
@@ -103,7 +110,7 @@ public class UserService {
         return true;
     }
 
-    // ✅ 完整的安全检测方法
+    // 安全检测方法
     public Map<String, Object> performSecurityCheck(String token) {
         User user = getUserByToken(token);
         if (user == null) throw new RuntimeException("用户不存在或 Token 无效");
@@ -204,7 +211,10 @@ public class UserService {
     }
 
     public User getUserById(Long userId) {
-        return userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) return null;
+        // 如果是已注销用户，清除敏感字段（在实际返回给前端时处理，这里先返回原始对象，由 Controller 决定）
+        return user;
     }
 
     public long countUsersByRoleId(Long roleId) {
@@ -239,5 +249,17 @@ public class UserService {
 
     public boolean existsByPhone(String phone) {
         return userRepository.existsByPhone(phone);
+    }
+
+    //注销账号
+    @Transactional
+    public void deactivateUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("用户不存在"));
+        user.setStatus("DELETED");
+        user.setToken(null);                     // 清除 token，立即退出
+        user.setTokenExpireTime(null);           // 清除过期时间
+        user.setDeletedAt(LocalDateTime.now());  // 记录注销时间
+        userRepository.save(user);
     }
 }

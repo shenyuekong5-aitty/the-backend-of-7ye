@@ -34,7 +34,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ 新增 CORS 配置（开发阶段允许所有来源）
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -88,7 +87,8 @@ public class SecurityConfig {
                                 antMatcher("/api/user/reset-password"),
                                 antMatcher("/api/user/check-phone"),
                                 antMatcher("/ws/**"),
-                                antMatcher("/api/qrlogin/**")
+                                antMatcher("/api/qrlogin/**"),
+                                antMatcher("/api/user/deactivate")
                         ).permitAll()
                         .requestMatchers(antMatcher("/static/**"), antMatcher("/favicon.ico"), antMatcher("/error"), antMatcher("/assets/**")).permitAll()
                         .anyRequest().authenticated()

@@ -4,6 +4,9 @@ import org.example.springboot2.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -15,4 +18,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByPhone(String phone);
 
     long countByRoleId(Long roleId);
+    List<User> findByStatusAndDeletedAtBefore(String status, LocalDateTime deletedAt);
 }

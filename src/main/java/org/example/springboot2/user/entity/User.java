@@ -51,6 +51,12 @@ public class User {
         createTime = LocalDateTime.now();
     }
 
+    @Column(name = "status", length = 20)
+    private String status = "ACTIVE";    // ACTIVE / DELETED
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     public Long getId() {
         return id;
     }
@@ -150,4 +156,10 @@ public class User {
     public LocalDateTime getTokenExpireTime() { return tokenExpireTime; }
 
     public void setTokenExpireTime(LocalDateTime tokenExpireTime) { this.tokenExpireTime = tokenExpireTime; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public LocalDateTime getDeletedAt() { return deletedAt; }
+    public void setDeletedAt(LocalDateTime deletedAt) { this.deletedAt = deletedAt; }
 }

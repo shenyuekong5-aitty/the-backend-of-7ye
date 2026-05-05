@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,19 +33,19 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> loginParams) {
         String account = loginParams.get("username");
         String password = loginParams.get("password");
-        User user = userService.login(account, password);
-        Map<String, Object> response = new HashMap<>();
-        if (user != null) {
+        try {
+            User user = userService.login(account, password);
+            Map<String, Object> response = new HashMap<>();
             response.put("code", 200);
             response.put("data", Map.of("token", user.getToken()));
             return ResponseEntity.ok(response);
-        } else {
+        } catch (RuntimeException e) {
+            Map<String, Object> response = new HashMap<>();
             response.put("code", 201);
-            response.put("data", Map.of("message", "账号或密码不正确"));
+            response.put("data", Map.of("message", e.getMessage()));
             return ResponseEntity.ok(response);
         }
     }
-
     // 获取当前用户信息
     @GetMapping("/info")
     public ResponseEntity<Map<String, Object>> getUserInfo(@RequestHeader("token") String token) {
@@ -54,11 +55,18 @@ public class UserController {
             Map<String, Object> userMap = new HashMap<>();
             userMap.put("username", user.getUsername());
             userMap.put("avatar", user.getAvatar());
-            userMap.put("nickname", user.getNickname());   // 新增昵称
+            userMap.put("nickname", user.getNickname());
             userMap.put("role", user.getRole());
             userMap.put("userid", user.getId());
             userMap.put("desc", user.getDesc());
             userMap.put("createTime", user.getCreateTime());
+
+            // ✅ 在这里添加 isDeleted 标识
+            if ("DELETED".equals(user.getStatus())) {
+                userMap.put("isDeleted", true);
+            } else {
+                userMap.put("isDeleted", false);
+            }
 
             List<String> permissions = permissionService.getPermissionsByRoleId(user.getRoleId());
             userMap.put("routes", permissions);
@@ -68,11 +76,10 @@ public class UserController {
             return ResponseEntity.ok(response);
         } else {
             response.put("code", 201);
-            response.put("data", Map.of("message", "获取用户信息失败"));
+            response.put("data", Map.of("message", "获取用户信息失败，未登录账号或账号已注销"));
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
-
     // 获取所有用户（用于角色分配表格）
     @GetMapping("/list")
     public ResponseEntity<Map<String, Object>> userList() {
@@ -199,18 +206,29 @@ public class UserController {
             return ResponseEntity.ok(response);
         }
         Map<String, Object> publicInfo = new HashMap<>();
+        // 通用字段
         publicInfo.put("id", user.getId());
-        publicInfo.put("username", user.getUsername());
-        publicInfo.put("avatar", user.getAvatar());
         publicInfo.put("desc", user.getDesc());
-        publicInfo.put("nickname", user.getNickname());   // 新增
         publicInfo.put("role", user.getRole());
         publicInfo.put("createTime", user.getCreateTime());
+
+        // 根据状态设置差异字段
+        if ("DELETED".equals(user.getStatus())) {
+            publicInfo.put("username", "已注销用户");
+            publicInfo.put("nickname", "已注销用户");
+            publicInfo.put("avatar", "/default-avatar.png");
+            publicInfo.put("isDeleted", true);
+        } else {
+            publicInfo.put("username", user.getUsername());
+            publicInfo.put("nickname", user.getNickname());
+            publicInfo.put("avatar", user.getAvatar());
+            publicInfo.put("isDeleted", false);
+        }
+
         response.put("code", 200);
         response.put("data", publicInfo);
         return ResponseEntity.ok(response);
     }
-
     // 手机号注册（接收账号、密码、昵称）
     @PostMapping("/register-by-phone")
     public ResponseEntity<Map<String, Object>> registerByPhone(@RequestBody Map<String, String> body) {
@@ -260,5 +278,21 @@ public class UserController {
         response.put("data", Map.of("exists", exists));
         response.put("message", exists ? "手机号已注册" : "手机号可用");
         return ResponseEntity.ok(response);
+    }
+    //注销手机号
+    @PostMapping("/deactivate")
+    public ResponseEntity<Map<String, Object>> deactivate(@RequestHeader("token") String token) {
+        User currentUser = userService.getUserByToken(token);
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+                    "code", 401,
+                    "message", "未登录"
+            ));
+        }
+        userService.deactivateUser(currentUser.getId());
+        return ResponseEntity.ok(Map.of(
+                "code", 200,
+                "message", "账号已注销"
+        ));
     }
 }
