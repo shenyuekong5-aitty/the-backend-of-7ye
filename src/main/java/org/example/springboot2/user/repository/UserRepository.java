@@ -26,4 +26,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     long countByRoleId(Long roleId);
     List<User> findByStatusAndDeletedAtBefore(String status, LocalDateTime deletedAt);
+
+
 }

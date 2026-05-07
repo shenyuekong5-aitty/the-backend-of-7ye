@@ -23,13 +23,20 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     int countByParentId(Long parentId);
 
-    // ✅ 新增：增加点赞数（供 LikeService 调用）
+    // 增加点赞数（供 LikeService 调用）
     @Modifying
     @Query("UPDATE Comment c SET c.likeCount = c.likeCount + 1 WHERE c.id = :id")
     void incrementLikeCount(@Param("id") Long id);
 
-    // ✅ 新增：减少点赞数
+    // 减少点赞数
     @Modifying
     @Query("UPDATE Comment c SET c.likeCount = c.likeCount - 1 WHERE c.id = :id AND c.likeCount > 0")
     void decrementLikeCount(@Param("id") Long id);
+
+    /**
+     * 批量更新指定用户的所有评论昵称
+     */
+    @Modifying
+    @Query("UPDATE Comment c SET c.nickname = :newNickname WHERE c.userId = :userId")
+    int updateNicknameByUserId(@Param("userId") Long userId, @Param("newNickname") String newNickname);
 }

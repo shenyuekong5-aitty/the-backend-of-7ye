@@ -15,6 +15,9 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+import org.springframework.context.ApplicationEventPublisher;
+import org.example.springboot2.user.event.UserProfileUpdatedEvent;
+
 @Service
 public class UserService {
 
@@ -32,6 +35,9 @@ public class UserService {
 
     @Autowired
     private SmsService smsService;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     // 不再注入 QrLoginService
 
@@ -328,6 +334,14 @@ public class UserService {
             user.setPhone(phone);
         }
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        // 发布用户资料更新事件，触发各模块冗余数据同步
+        eventPublisher.publishEvent(new UserProfileUpdatedEvent(
+                savedUser.getId(),
+                savedUser.getNickname(),
+                savedUser.getAvatar()));
+
+        return savedUser;
     }
 }
