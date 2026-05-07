@@ -73,6 +73,7 @@ public class CommentService {
         node.put("parentId", comment.getParentId());
         node.put("content", comment.getContent());
         node.put("userId", comment.getUserId());
+        node.put("nickname", comment.getNickname());
         node.put("username", comment.getUsername());
         node.put("avatar", comment.getAvatar());
         node.put("likeCount", comment.getLikeCount());
@@ -101,6 +102,7 @@ public class CommentService {
         comment.setContent(content);
         comment.setUserId(user.getId());
         comment.setUsername(user.getUsername());
+        comment.setNickname(user.getNickname() != null ? user.getNickname() : user.getUsername());
         comment.setAvatar(user.getAvatar());
         comment.setTargetType(targetType);
         comment.setTargetId(targetId);
