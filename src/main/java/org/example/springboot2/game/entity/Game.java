@@ -13,7 +13,7 @@ public class Game {
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "cover_img")
+    @Column(name = "cover_img", columnDefinition = "TEXT")
     private String coverImg;
 
     private String author;

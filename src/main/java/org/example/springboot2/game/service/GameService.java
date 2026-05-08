@@ -16,4 +16,25 @@ public class GameService {
     public List<Game> getAllGames() {
         return gameRepository.findAll();
     }
+
+    public Game addGame(Game game) {
+        return gameRepository.save(game);
+    }
+
+    public Game updateGame(Long id, Game game) {
+        Game existing = gameRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("游戏不存在"));
+        existing.setName(game.getName());
+        existing.setAuthor(game.getAuthor());
+        existing.setBrief(game.getBrief());
+        existing.setCoverImg(game.getCoverImg());
+        return gameRepository.save(existing);
+    }
+
+    public void deleteGame(Long id) {
+        if (!gameRepository.existsById(id)) {
+            throw new RuntimeException("游戏不存在");
+        }
+        gameRepository.deleteById(id);
+    }
 }
