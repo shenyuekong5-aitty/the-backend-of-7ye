@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.example.springboot2.user.event.UserProfileUpdatedEvent;
@@ -343,5 +344,13 @@ public class UserService {
                 savedUser.getAvatar()));
 
         return savedUser;
+    }
+
+    //通过id找nickname
+    // org.example.springboot2.user.service.UserService
+
+    public Map<Long, User> getUserMapByIds(Set<Long> ids) {
+        List<User> users = userRepository.findAllById(ids);
+        return users.stream().collect(Collectors.toMap(User::getId, user -> user));
     }
 }

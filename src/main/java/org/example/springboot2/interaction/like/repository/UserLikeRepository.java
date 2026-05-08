@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface UserLikeRepository extends JpaRepository<UserLike, Long> {
     boolean existsByUserIdAndTargetTypeAndTargetId(Long userId, String targetType, Long targetId);
     void deleteByUserIdAndTargetTypeAndTargetId(Long userId, String targetType, Long targetId);
-
+    // 统计点赞总数
+    long countByTargetTypeAndTargetId(String targetType, Long targetId);
 }
