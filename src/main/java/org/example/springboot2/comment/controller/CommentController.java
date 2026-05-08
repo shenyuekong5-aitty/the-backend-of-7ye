@@ -16,6 +16,12 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    /**
+     * 获取评论列表（统一入口）
+     * 支持两种场景：
+     * 1. 无 targetType 和 targetId → 获取留言板评论（target_type IS NULL）
+     * 2. 有 targetType 和 targetId → 获取指定目标的评论
+     */
     @GetMapping("/list")
     public ResponseEntity<Map<String, Object>> getCommentList(
             @RequestParam(defaultValue = "1") int pageNo,
@@ -23,22 +29,10 @@ public class CommentController {
             @RequestHeader(value = "token", required = false) String token,
             @RequestParam(required = false) String targetType,
             @RequestParam(required = false) Long targetId) {
-        Map<String, Object> data = commentService.getCommentTree(pageNo, pageSize, token, targetType, targetId);
-        Map<String, Object> response = new HashMap<>();
-        response.put("code", 200);
-        response.put("data", data);
-        response.put("message", "获取留言列表成功");
-        return ResponseEntity.ok(response);
-    }
 
-    @GetMapping("/list/{targetType}/{targetId}")
-    public ResponseEntity<Map<String, Object>> getTargetCommentList(
-            @PathVariable String targetType,
-            @PathVariable Long targetId,
-            @RequestParam(defaultValue = "1") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize,
-            @RequestHeader(value = "token", required = false) String token) {
-        Map<String, Object> data = commentService.getCommentTree(pageNo, pageSize, token, targetType, targetId);
+        Map<String, Object> data = commentService.getCommentTree(
+                pageNo, pageSize, token, targetType, targetId);
+
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);
         response.put("data", data);

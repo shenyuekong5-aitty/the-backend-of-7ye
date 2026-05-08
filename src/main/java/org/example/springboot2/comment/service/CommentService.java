@@ -41,9 +41,15 @@ public class CommentService {
         Page<Comment> page;
 
         if (targetType != null && targetId != null) {
+            // 指定类型 + 指定目标（如某篇文章）
             page = commentRepository.findByTargetTypeAndTargetIdAndParentIdIsNullOrderByCreateTimeDesc(
                     targetType, targetId, pageable);
+        } else if (targetType != null) {
+            // 只指定类型（如所有音乐评论）
+            page = commentRepository.findByTargetTypeAndParentIdIsNullOrderByCreateTimeDesc(
+                    targetType, pageable);
         } else {
+            // 留言板（target_type IS NULL）
             page = commentRepository.findByTargetTypeIsNullAndParentIdIsNullOrderByCreateTimeDesc(pageable);
         }
 
