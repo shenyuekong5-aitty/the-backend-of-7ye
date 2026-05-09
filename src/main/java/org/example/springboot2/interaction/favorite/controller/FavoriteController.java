@@ -1,6 +1,6 @@
-package org.example.springboot2.favorite.controller;
+package org.example.springboot2.interaction.favorite.controller;
 
-import org.example.springboot2.favorite.service.FavoriteService;
+import org.example.springboot2.interaction.favorite.service.FavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

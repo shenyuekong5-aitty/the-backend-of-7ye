@@ -1,4 +1,4 @@
-package org.example.springboot2.favorite.repository;
+package org.example.springboot2.interaction.favorite.repository;
 
 import org.example.springboot2.favorite.entity.Favorite;
 import org.springframework.data.domain.Page;

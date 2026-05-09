@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 public class Quote {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;   // Mock 数据中指定了 id，不使用自增
 
     @Column(columnDefinition = "TEXT", nullable = false)
