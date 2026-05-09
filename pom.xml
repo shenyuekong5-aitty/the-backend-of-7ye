@@ -77,6 +77,13 @@
             <artifactId>aliyun-java-sdk-dypnsapi</artifactId>
             <version>1.2.10</version>  <!-- 已验证的稳定版本 -->
         </dependency>
+
+        <!--   excel依赖     -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>3.3.2</version>
+        </dependency>
     </dependencies>
 
 
