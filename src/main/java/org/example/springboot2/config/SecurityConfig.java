@@ -88,7 +88,9 @@ public class SecurityConfig {
                                 antMatcher("/api/user/check-phone"),
                                 antMatcher("/ws/**"),
                                 antMatcher("/api/qrlogin/**"),
-                                antMatcher("/api/user/deactivate")
+                                antMatcher("/api/user/deactivate"),
+                                antMatcher("/api/friend/**"),
+                                antMatcher("/api/memory/**")
                         ).permitAll()
                         .requestMatchers(antMatcher("/static/**"), antMatcher("/favicon.ico"), antMatcher("/error"), antMatcher("/assets/**")).permitAll()
                         .anyRequest().authenticated()
