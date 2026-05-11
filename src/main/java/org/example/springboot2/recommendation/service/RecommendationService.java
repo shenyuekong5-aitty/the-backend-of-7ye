@@ -33,7 +33,7 @@ public class RecommendationService {
     private MusicRepository musicRepository;
 
     @Autowired
-    private AnimeRepository animeRepository;   // ✅ 新增番剧仓库
+    private AnimeRepository animeRepository;
 
     @Autowired
     private UserService userService;
@@ -44,8 +44,13 @@ public class RecommendationService {
     @Transactional
     public Recommendation submit(String token, String type, Map<String, Object> contentMap) {
         User user = userService.getUserByToken(token);
-        if ("friend".equals(user.getRole())) {
-            throw new RuntimeException("无权限");
+        //  检查 user 是否为空
+        if (user == null) {
+            throw new RuntimeException("未登录或Token无效");
+        }
+        //  只有 friend 角色才能推荐（之前逻辑写反了）
+        if (!"friend".equals(user.getRole())) {
+            throw new RuntimeException("无权限，仅朋友可推荐");
         }
         try {
             String json = objectMapper.writeValueAsString(contentMap);
@@ -60,11 +65,13 @@ public class RecommendationService {
             throw new RuntimeException("数据格式错误");
         }
     }
-
     // 管理员审核通过（支持 book, music, anime）
     @Transactional
     public void approve(String token, Long recId) {
         User admin = userService.getUserByToken(token);
+        if (admin == null) {
+            throw new RuntimeException("未登录或Token无效");
+        }
         if (!"admin".equals(admin.getRole())) {
             throw new RuntimeException("无权限");
         }
@@ -116,6 +123,9 @@ public class RecommendationService {
     @Transactional
     public void reject(String token, Long recId, String comment) {
         User admin = userService.getUserByToken(token);
+        if (admin == null) {
+            throw new RuntimeException("未登录或Token无效");
+        }
         if (!"admin".equals(admin.getRole())) {
             throw new RuntimeException("无权限");
         }
