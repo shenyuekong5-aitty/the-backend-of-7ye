@@ -1,10 +1,17 @@
 package org.example.springboot2.interaction.favorite.service;
 
+import org.example.springboot2.cognize.entity.Cognize;
+import org.example.springboot2.cognize.repository.CognizeRepository;
+import org.example.springboot2.creed.entity.Creed;
+import org.example.springboot2.creed.repository.CreedRepository;
 import org.example.springboot2.emotion.entity.Emotion;
+import org.example.springboot2.emotion.repository.EmotionRepository;
 import org.example.springboot2.favorite.entity.Favorite;
 import org.example.springboot2.interaction.favorite.repository.FavoriteRepository;
 import org.example.springboot2.quote.entity.Quote;
-import org.example.springboot2.study.repository.StudyRepository;   // 示例，可注入其他业务 Repository
+import org.example.springboot2.quote.repository.QuoteRepository;
+import org.example.springboot2.study.entity.Study;
+import org.example.springboot2.study.repository.StudyRepository;
 import org.example.springboot2.user.entity.User;
 import org.example.springboot2.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.example.springboot2.emotion.repository.EmotionRepository;
-import org.example.springboot2.quote.repository.QuoteRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,13 +35,19 @@ public class FavoriteService {
     private UserService userService;
 
     @Autowired
-    private StudyRepository studyRepository;   // 学习模块的 Repository，用于更新 favorite_count
+    private StudyRepository studyRepository;
 
     @Autowired
     private EmotionRepository emotionRepository;
 
     @Autowired
     private QuoteRepository quoteRepository;
+
+    @Autowired
+    private CreedRepository creedRepository;
+
+    @Autowired
+    private CognizeRepository cognizeRepository;
 
     /**
      * 收藏操作
@@ -58,7 +67,6 @@ public class FavoriteService {
         favorite.setTargetId(targetId);
         favoriteRepository.save(favorite);
 
-        // 更新对应业务表的 favorite_count（以 study 为例）
         updateFavoriteCount(targetType, targetId, 1);
     }
 
@@ -76,7 +84,6 @@ public class FavoriteService {
 
         favoriteRepository.deleteByUserIdAndTargetTypeAndTargetId(user.getId(), targetType, targetId);
 
-        // 更新对应业务表的 favorite_count
         updateFavoriteCount(targetType, targetId, -1);
     }
 
@@ -107,7 +114,6 @@ public class FavoriteService {
         return favoriteRepository.existsByUserIdAndTargetTypeAndTargetId(user.getId(), targetType, targetId);
     }
 
-
     /**
      * 根据 targetType 更新对应业务表的 favorite_count
      */
@@ -120,10 +126,7 @@ public class FavoriteService {
                     studyRepository.decrementFavoriteCount(targetId);
                 }
                 break;
-            // case "book": ...
-            // case "music": ...
             default:
-                // 可记录日志或忽略
                 break;
         }
     }
@@ -145,7 +148,6 @@ public class FavoriteService {
             map.put("targetId", fav.getTargetId());
             map.put("createTime", fav.getCreateTime());
 
-            // 根据 targetType 获取业务摘要
             String title = "";
             String brief = "";
 
@@ -163,6 +165,30 @@ public class FavoriteService {
                     if (quote != null) {
                         title = "一句名言";
                         brief = quote.getContent();
+                    }
+                    break;
+                case "creed":
+                    Creed creed = creedRepository.findById(fav.getTargetId()).orElse(null);
+                    if (creed != null) {
+                        String content = creed.getContent();
+                        title = content.length() > 30 ? content.substring(0, 30) + "..." : content;
+                        brief = content;
+                    }
+                    break;
+                case "cognize":
+                    Cognize cognize = cognizeRepository.findById(fav.getTargetId()).orElse(null);
+                    if (cognize != null) {
+                        String content = cognize.getContent();
+                        title = content.length() > 30 ? content.substring(0, 30) + "..." : content;
+                        brief = content;
+                    }
+                    break;
+                case "study":
+                    // ✅ 使用 getDescription() 而非 getContent()
+                    Study study = studyRepository.findById(fav.getTargetId()).orElse(null);
+                    if (study != null) {
+                        title = study.getTitle();
+                        brief = study.getDescription();
                     }
                     break;
                 default:
