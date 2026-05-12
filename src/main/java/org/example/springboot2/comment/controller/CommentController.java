@@ -28,10 +28,13 @@ public class CommentController {
             @RequestParam(defaultValue = "10") int pageSize,
             @RequestHeader(value = "token", required = false) String token,
             @RequestParam(required = false) String targetType,
-            @RequestParam(required = false) Long targetId) {
+            @RequestParam(required = false) Long targetId,
+            @RequestParam(defaultValue = "false") boolean allComments
+            )
+    {
 
         Map<String, Object> data = commentService.getCommentTree(
-                pageNo, pageSize, token, targetType, targetId);
+                pageNo, pageSize, token, targetType, targetId,allComments);
 
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);

@@ -90,7 +90,8 @@ public class SecurityConfig {
                                 antMatcher("/api/qrlogin/**"),
                                 antMatcher("/api/user/deactivate"),
                                 antMatcher("/api/friend/**"),
-                                antMatcher("/api/memory/**")
+                                antMatcher("/api/memory/**"),
+                                antMatcher("/api/notice/**")
                         ).permitAll()
                         .requestMatchers(antMatcher("/static/**"), antMatcher("/favicon.ico"), antMatcher("/error"), antMatcher("/assets/**")).permitAll()
                         .anyRequest().authenticated()

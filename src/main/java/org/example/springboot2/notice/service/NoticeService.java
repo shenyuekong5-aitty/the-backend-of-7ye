@@ -8,10 +8,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class NoticeService {
@@ -33,5 +33,52 @@ public class NoticeService {
         response.put("pageSize", pageSize);
         response.put("pageNo", pageNo);
         return response;
+    }
+
+    /**
+     * 根据 ID 获取公告
+     */
+    public Notice getById(Long id) {
+        return noticeRepository.findById(id).orElse(null);
+    }
+
+    /**
+     * 新增公告
+     */
+    @Transactional
+    public Notice addNotice(String title, String content, String publisher, Boolean isImportant) {
+        Notice notice = new Notice();
+        notice.setTitle(title);
+        notice.setContent(content);
+        notice.setPublisher(publisher);
+        notice.setIsImportant(isImportant != null ? isImportant : false);
+        notice.setPublishTime(LocalDateTime.now());
+        return noticeRepository.save(notice);
+    }
+
+    /**
+     * 编辑公告
+     */
+    @Transactional
+    public Notice updateNotice(Long id, String title, String content, Boolean isImportant) {
+        Notice notice = noticeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("公告不存在"));
+        notice.setTitle(title);
+        notice.setContent(content);
+        if (isImportant != null) {
+            notice.setIsImportant(isImportant);
+        }
+        return noticeRepository.save(notice);
+    }
+
+    /**
+     * 删除公告
+     */
+    @Transactional
+    public void deleteNotice(Long id) {
+        if (!noticeRepository.existsById(id)) {
+            throw new RuntimeException("公告不存在");
+        }
+        noticeRepository.deleteById(id);
     }
 }

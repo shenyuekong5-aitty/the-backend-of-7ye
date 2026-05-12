@@ -41,4 +41,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     int updateNicknameByUserId(@Param("userId") Long userId, @Param("newNickname") String newNickname);
 
     Page<Comment> findByTargetTypeAndParentIdIsNullOrderByCreateTimeDesc(String targetType, Pageable pageable);
+
+    Page<Comment> findByParentIdIsNullOrderByCreateTimeDesc(Pageable pageable);
 }

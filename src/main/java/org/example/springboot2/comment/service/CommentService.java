@@ -36,20 +36,21 @@ public class CommentService {
     private ObjectMapper objectMapper; // 用于序列化 WebSocket 消息
 
     public Map<String, Object> getCommentTree(int pageNo, int pageSize, String token,
-                                              String targetType, Long targetId) {
+                                              String targetType, Long targetId,boolean allComments) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by(Sort.Direction.DESC, "createTime"));
         Page<Comment> page;
 
         if (targetType != null && targetId != null) {
-            // 指定类型 + 指定目标（如某篇文章）
-            page = commentRepository.findByTargetTypeAndTargetIdAndParentIdIsNullOrderByCreateTimeDesc(
-                    targetType, targetId, pageable);
+            // 特定目标评论
+            page = commentRepository.findByTargetTypeAndTargetIdAndParentIdIsNullOrderByCreateTimeDesc(targetType, targetId, pageable);
         } else if (targetType != null) {
-            // 只指定类型（如所有音乐评论）
-            page = commentRepository.findByTargetTypeAndParentIdIsNullOrderByCreateTimeDesc(
-                    targetType, pageable);
+            // 特定类型的所有评论
+            page = commentRepository.findByTargetTypeAndParentIdIsNullOrderByCreateTimeDesc(targetType, pageable);
+        } else if (allComments) {
+            // 所有顶级评论（不分目标）
+            page = commentRepository.findByParentIdIsNullOrderByCreateTimeDesc(pageable);
         } else {
-            // 留言板（target_type IS NULL）
+            // 默认：只加载留言板评论（target_type IS NULL）
             page = commentRepository.findByTargetTypeIsNullAndParentIdIsNullOrderByCreateTimeDesc(pageable);
         }
 
