@@ -2,7 +2,9 @@ package org.example.springboot2.qrlogin.service;
 
 import org.example.springboot2.qrlogin.entity.QrSession;
 import org.example.springboot2.user.entity.User;
+import org.example.springboot2.user.entity.UserToken;
 import org.example.springboot2.user.repository.UserRepository;
+import org.example.springboot2.user.repository.UserTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class QrLoginService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserTokenRepository userTokenRepository;   // 新增
 
     // 会话存储
     private final ConcurrentHashMap<String, QrSession> sessionMap = new ConcurrentHashMap<>();
@@ -34,7 +39,7 @@ public class QrLoginService {
     }
 
     /**
-     * 手机端确认登录（生成独立的PC端token，并设置过期时间）
+     * 手机端确认登录（生成独立的PC端token，写入 user_token 表）
      */
     public void confirmSession(String sessionId, Long userId) {
         QrSession session = sessionMap.get(sessionId);
@@ -46,7 +51,14 @@ public class QrLoginService {
             String pcToken = UUID.randomUUID().toString();
             session.setPcToken(pcToken);
 
-            // 将新token写入数据库
+            // 存入 user_token 表，PC 端专用 token
+            UserToken userToken = new UserToken();
+            userToken.setUserId(userId);
+            userToken.setToken(pcToken);
+            userToken.setExpireTime(LocalDateTime.now().plusDays(7)); // 7天有效
+            userTokenRepository.save(userToken);
+
+            // 可选：同步更新 sys_user.token 字段（保持兼容性）
             User user = userRepository.findById(userId).orElse(null);
             if (user != null) {
                 user.setToken(pcToken);
@@ -55,7 +67,6 @@ public class QrLoginService {
             }
         }
     }
-
     /**
      * PC 端轮询状态（同时检查过期）
      */

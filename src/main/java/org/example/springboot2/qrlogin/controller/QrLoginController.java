@@ -46,6 +46,8 @@ public class QrLoginController {
 
         //  从 JSON 请求体中取出 sessionId
         String sessionId = body.get("sessionId");
+        System.out.println("接收到的token:" + token);
+        System.out.println("接收到的sessionId:" + sessionId);
         if (sessionId == null || sessionId.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("code", 400, "message", "缺少 sessionId"));
         }

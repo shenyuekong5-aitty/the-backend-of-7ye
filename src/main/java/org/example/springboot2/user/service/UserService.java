@@ -5,7 +5,9 @@
     import org.example.springboot2.role.service.RoleService;
     import org.example.springboot2.sms.service.SmsService;
     import org.example.springboot2.user.entity.User;
+    import org.example.springboot2.user.entity.UserToken;
     import org.example.springboot2.user.repository.UserRepository;
+    import org.example.springboot2.user.repository.UserTokenRepository;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.security.crypto.password.PasswordEncoder;
     import org.springframework.stereotype.Service;
@@ -40,6 +42,9 @@
         @Autowired
         private ApplicationEventPublisher eventPublisher;
 
+        @Autowired
+        private UserTokenRepository userTokenRepository;
+
         // 不再注入 QrLoginService
 
         /**
@@ -47,9 +52,19 @@
          */
         private String generateAndSetToken(User user) {
             String token = UUID.randomUUID().toString();
+
+            // 1. 存入 sys_user_token 表（多设备支持）
+            UserToken userToken = new UserToken();
+            userToken.setUserId(user.getId());
+            userToken.setToken(token);
+            userToken.setExpireTime(LocalDateTime.now().plusDays(30));
+            userTokenRepository.save(userToken);
+
+            // 2. 同时更新 sys_user 表的 token 字段（保持兼容）
             user.setToken(token);
             user.setTokenExpireTime(LocalDateTime.now().plusDays(30));
             userRepository.save(user);
+
             return token;
         }
 
@@ -60,14 +75,14 @@
             User user;
             if (account.matches("^1[3-9]\\d{9}$")) {
                 user = userRepository.findByPhone(account);
+                //  检查是否已注销
+                if ("DELETED".equals(user.getStatus())) {
+                    throw new RuntimeException("该账号已注销，无法登录");
+                }
             } else {
                 user = userRepository.findByUsername(account);
             }
             if (user != null && passwordEncoder.matches(rawPassword, user.getPassword())) {
-                // ✅ 检查是否已注销
-                if ("DELETED".equals(user.getStatus())) {
-                    throw new RuntimeException("该账号已注销，无法登录");
-                }
                 generateAndSetToken(user);
                 return user;
             }
@@ -78,13 +93,31 @@
          * 根据 token 获取用户（无临时token逻辑）
          */
         public User getUserByToken(String token) {
+            // 1. 优先从 user_token 表查
+            Optional<UserToken> opt = userTokenRepository.findByToken(token);
+            if (opt.isPresent()) {
+                UserToken ut = opt.get();
+                // 检查是否过期
+                if (ut.getExpireTime() != null && ut.getExpireTime().isBefore(LocalDateTime.now())) {
+                    // 过期 token，可选择删除
+                    userTokenRepository.deleteByToken(token);
+                    return null;
+                }
+                // 查找用户
+                User user = userRepository.findById(ut.getUserId()).orElse(null);
+                if (user != null && !"DELETED".equals(user.getStatus())) {
+                    return user;
+                }
+                return null;
+            }
+
+            // 2. 回退到旧方式（兼容之前仅存在 sys_user.token 的 token）
             User user = userRepository.findByToken(token);
             if (user != null) {
                 if ("DELETED".equals(user.getStatus())) {
-                    return null;   // 已注销用户返回 null，前端会提示未登录
+                    return null;
                 }
-                if (user.getTokenExpireTime() != null
-                        && user.getTokenExpireTime().isBefore(LocalDateTime.now())) {
+                if (user.getTokenExpireTime() != null && user.getTokenExpireTime().isBefore(LocalDateTime.now())) {
                     return null;
                 }
                 return user;
@@ -109,12 +142,18 @@
 
         @Transactional
         public boolean logout(String token) {
+            // 1. 删除 user_token 表中的记录
+            userTokenRepository.deleteByToken(token);
+
+            // 2. 如果 sys_user 表中也存在该 token，则清除（可选）
             User user = userRepository.findByToken(token);
-            if (user == null) return false;
-            user.setToken(null);
-            user.setTokenExpireTime(null);
-            userRepository.save(user);
-            return true;
+            if (user != null) {
+                user.setToken(null);
+                user.setTokenExpireTime(null);
+                userRepository.save(user);
+                return true;
+            }
+            return false;
         }
 
         // 安全检测方法
@@ -241,30 +280,25 @@
                 throw new RuntimeException("验证码错误或已过期");
             }
 
-            // 1. 检查手机号是否被活跃用户占用（已注销的不算）
-            if (userRepository.existsByPhoneAndStatusNot(phone, "DELETED")) {
+            // 1. 检查手机号是否已被活跃用户占用
+            User existingUser = userRepository.findByPhone(phone);
+            if (existingUser != null && !"DELETED".equals(existingUser.getStatus())) {
                 throw new RuntimeException("手机号已注册");
             }
 
-            // 2. 检查用户名是否被活跃用户占用（已注销的不算）
-            if (userRepository.existsByUsernameAndStatusNot(username, "DELETED")) {
+            // 2. 检查用户名是否已被活跃用户占用
+            User existingUsername = userRepository.findByUsername(username);
+            if (existingUsername != null && !"DELETED".equals(existingUsername.getStatus())) {
                 throw new RuntimeException("账号已存在，请更换");
             }
 
-            // 3. 尝试寻找已注销的同名用户或同手机号用户，准备复用
-            User existingUser = userRepository.findByUsernameAndStatus(username, "DELETED");
-            if (existingUser == null) {
-                existingUser = userRepository.findByPhoneAndStatus(phone, "DELETED");
-            }
-
+            // 3. 如果有已注销的同手机号用户，则复用；否则新建
             User user;
-            if (existingUser != null) {
-                // 复用已注销的用户记录，更新所有字段
+            if (existingUser != null && "DELETED".equals(existingUser.getStatus())) {
                 user = existingUser;
                 user.setStatus("ACTIVE");
                 user.setDeletedAt(null);
             } else {
-                // 全新的用户
                 user = new User();
                 user.setRole("common");
                 user.setRoleId(3L);
@@ -278,8 +312,9 @@
                 user.setAvatar(avatar);
             }
 
-            generateAndSetToken(user);
-            return user;
+            User savedUser = userRepository.save(user);
+            generateAndSetToken(savedUser);
+            return savedUser;
         }
         @Transactional
         public void resetPassword(String phone, String code, String newPassword) {

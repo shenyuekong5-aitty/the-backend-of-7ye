@@ -299,7 +299,7 @@ public class UserController {
             userService.resetPassword(phone, code, newPassword);
             return ResponseEntity.ok(Map.of("code", 200, "message", "密码重置成功"));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("code", 400, "message", e.getMessage()));
+            return ResponseEntity.ok(Map.of("code", 400, "message", e.getMessage()));
         }
     }
     //检查手机号是否已经注册
