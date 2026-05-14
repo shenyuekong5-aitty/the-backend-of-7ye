@@ -11,6 +11,7 @@ import org.example.springboot2.recommendation.entity.Recommendation;
 import org.example.springboot2.recommendation.repository.RecommendationRepository;
 import org.example.springboot2.user.entity.User;
 import org.example.springboot2.user.service.UserService;
+import org.example.springboot2.websocket.WebSocketServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,13 +95,16 @@ public class RecommendationService {
             case "music":
                 try {
                     Music music = objectMapper.readValue(rec.getContent(), Music.class);
+                    System.out.println("解析成功: " + music.getName());
                     music.setId(null);
                     musicRepository.save(music);
                 } catch (Exception e) {
-                    throw new RuntimeException("音乐内容解析失败");
+                    System.err.println("音乐解析失败，JSON内容: " + rec.getContent());
+                    e.printStackTrace();
+                    throw new RuntimeException("音乐内容解析失败: " + e.getMessage());
                 }
                 break;
-            case "anime":   // ✅ 新增番剧处理
+            case "anime":   //  新增番剧处理
                 try {
                     Anime anime = objectMapper.readValue(rec.getContent(), Anime.class);
                     anime.setId(null);
@@ -117,6 +121,17 @@ public class RecommendationService {
         rec.setReviewerId(admin.getId());
         rec.setUpdateTime(java.time.LocalDateTime.now());
         recommendationRepository.save(rec);
+        //  推送通知给推荐人
+        try {
+            Map<String, Object> notice = new HashMap<>();
+            notice.put("type", "recommendation_result");
+            notice.put("status", "approved");
+            notice.put("recId", rec.getId());
+            notice.put("message", "你的推荐已通过审核！");
+            WebSocketServer.sendToUser(rec.getProposerId(), objectMapper.writeValueAsString(notice));
+        } catch (Exception e) {
+            e.printStackTrace();  // 推送失败不影响主流程
+        }
     }
 
     // 拒绝推荐
@@ -136,6 +151,17 @@ public class RecommendationService {
         rec.setReviewComment(comment);
         rec.setUpdateTime(java.time.LocalDateTime.now());
         recommendationRepository.save(rec);
+        // 推送通知给推荐人
+        try {
+            Map<String, Object> notice = new HashMap<>();
+            notice.put("type", "recommendation_result");
+            notice.put("status", "rejected");
+            notice.put("recId", rec.getId());
+            notice.put("message", "你的推荐已被拒绝：" + (comment != null ? comment : ""));
+            WebSocketServer.sendToUser(rec.getProposerId(), objectMapper.writeValueAsString(notice));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // 获取待审核列表（管理员用）
@@ -175,5 +201,11 @@ public class RecommendationService {
             result.add(item);
         }
         return result;
+    }
+
+    // 用户推荐记录
+    public List<Map<String, Object>> getListByProposerId(Long proposerId) {
+        List<Recommendation> recs = recommendationRepository.findByProposerIdOrderByCreateTimeDesc(proposerId);
+        return convertToMapList(recs);
     }
 }

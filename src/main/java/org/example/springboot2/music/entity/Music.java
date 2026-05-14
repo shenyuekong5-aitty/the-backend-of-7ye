@@ -1,9 +1,11 @@
 package org.example.springboot2.music.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "sys_music")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Music {
 
     @Id

@@ -10,4 +10,5 @@ public interface RecommendationRepository extends JpaRepository<Recommendation, 
     List<Recommendation> findByStatusOrderByCreateTimeDesc(String status);
     List<Recommendation> findByTypeAndStatus(String type, String status);
     List<Recommendation> findAllByOrderByCreateTimeDesc();
+    List<Recommendation> findByProposerIdOrderByCreateTimeDesc(Long proposerId);
 }

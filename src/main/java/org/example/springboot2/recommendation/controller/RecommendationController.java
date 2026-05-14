@@ -84,4 +84,17 @@ public class RecommendationController {
             return ResponseEntity.ok(Map.of("code", 500, "message", e.getMessage()));
         }
     }
+
+    /**
+     * 获取当前用户的推荐记录
+     */
+    @GetMapping("/my")
+    public ResponseEntity<Map<String, Object>> getMyRecommendations(@RequestHeader("token") String token) {
+        User user = userService.getUserByToken(token);
+        if (user == null) {
+            return ResponseEntity.status(401).body(Map.of("code", 401, "message", "未登录"));
+        }
+        List<Map<String, Object>> list = recommendationService.getListByProposerId(user.getId());
+        return ResponseEntity.ok(Map.of("code", 200, "data", list));
+    }
 }
