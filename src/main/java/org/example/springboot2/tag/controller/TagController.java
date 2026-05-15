@@ -136,12 +136,12 @@ public class TagController {
         try {
             Map<String, Object> result = tagService.importTags(file);
             return ResponseEntity.ok(Map.of("code", 200, "data", result, "message", "导入完成"));
-        } catch (IOException e) {
+        } catch (Exception e) {   // ⚠️ 从 IOException 改为 Exception
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("code", 500, "message", "文件读取失败：" + e.getMessage()));
+                    .body(Map.of("code", 500, "message", "文件解析失败，请检查Excel格式是否正确（ID列必须为数字）"));
         }
     }
-
     /**
      * 下载导入模板（仅管理员）
      */
