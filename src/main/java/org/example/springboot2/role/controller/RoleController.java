@@ -31,7 +31,14 @@ public class RoleController {
     }
     @PostMapping
     public ResponseEntity<Map<String, Object>> addRole(@RequestBody Role role) {
-        // 简单保存，实际可增加名称唯一校验
+        // 名称唯一性校验
+        if (roleService.existsByName(role.getName())) {
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("code", 400);
+            resp.put("message", "角色名称已存在");
+            return ResponseEntity.badRequest().body(resp);
+        }
+
         roleService.saveRole(role);
         Map<String, Object> resp = new HashMap<>();
         resp.put("code", 200);
@@ -41,9 +48,17 @@ public class RoleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, Object>> updateRole(@PathVariable Long id, @RequestBody Role role) {
+        // 名称唯一性校验
+        if (roleService.existsByName(role.getName())) {
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("code", 400);
+            resp.put("message", "角色名称已存在");
+            return ResponseEntity.badRequest().body(resp);
+        }
+
         Role existing = roleService.getRoleById(id);
         if (existing == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("code", 404, "message", "角色不存在"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("code", 404, "message", "原角色不存在"));
         }
         existing.setName(role.getName());
         existing.setDescription(role.getDescription());

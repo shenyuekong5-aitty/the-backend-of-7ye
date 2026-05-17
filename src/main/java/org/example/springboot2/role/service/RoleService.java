@@ -19,6 +19,11 @@ public class RoleService {
         return roleRepository.findById(id).orElse(null);
     }
 
+    //更新时判断角色是否已经存在用
+    public boolean existsByName(String name) {
+        return roleRepository.existsByName(name);
+    }
+
     public void saveRole(Role role) {
         roleRepository.save(role);
     }

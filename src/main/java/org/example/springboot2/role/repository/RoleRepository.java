@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
+    //更新时判断角色是否已经存在用
+    boolean existsByName(String name);
 }
