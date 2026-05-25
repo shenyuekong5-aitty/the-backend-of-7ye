@@ -5,6 +5,8 @@ import org.example.springboot2.friend.entity.FriendMemory;
 import org.example.springboot2.friend.service.FriendService;
 import org.example.springboot2.user.entity.User;
 import org.example.springboot2.user.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,27 +30,27 @@ public class FriendController {
     // ----- 获取当前用户的核心好友昵称（用于显示标题） -----
     @GetMapping("/partner/info")
     public ResponseEntity<Map<String, Object>> getPartnerInfo(@RequestHeader("token") String token) {
+        // 保持不变
         User currentUser = getCurrentUser(token);
         if (currentUser == null) return unauthorized();
 
-        // 如果当前用户是管理员，可以指定查看某个朋友的昵称，否则固定返回管理员的昵称
-        // 这里简单处理：朋友角色总是显示管理员昵称，管理员则返回一个默认
         Map<String, Object> data = new HashMap<>();
         if ("admin".equals(currentUser.getRole())) {
-            data.put("partnerNickname", "所有朋友");  // 管理员可能看多个，暂时用通用标题
+            data.put("partnerNickname", "所有朋友");
         } else {
-            // 查找管理员，假设管理员 id=1
             User adminUser = userService.getUserById(1L);
             data.put("partnerNickname", adminUser != null ? adminUser.getNickname() : "核心用户");
         }
         return ResponseEntity.ok(Map.of("code", 200, "data", data));
     }
 
-    // ----- 获取专属回忆（管理员可以指定 partnerId，朋友只能看自己与管理员的） -----
+    // ----- 获取专属回忆（支持分页） -----
     @GetMapping("/memory")
     public ResponseEntity<Map<String, Object>> getMemories(
             @RequestHeader("token") String token,
-            @RequestParam(required = false) Long partnerId) {
+            @RequestParam(required = false) Long partnerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
         User currentUser = getCurrentUser(token);
         if (currentUser == null) return unauthorized();
 
@@ -56,20 +58,24 @@ public class FriendController {
         Long targetFriendId;
 
         if ("admin".equals(currentUser.getRole())) {
-            // 管理员可以指定查看哪个朋友的回忆，不传则返回空或所有
             if (partnerId != null) {
                 targetFriendId = partnerId;
             } else {
-                // 管理员未指定，暂时返回空列表，或可返回所有朋友的总回忆（略）
-                return ResponseEntity.ok(Map.of("code", 200, "data", Map.of("items", List.of()), "message", "请选择朋友"));
+                // 未选择朋友，返回空的分页结构
+                Map<String, Object> data = new HashMap<>();
+                data.put("items", List.of());
+                data.put("totalPages", 0);
+                data.put("totalElements", 0);
+                data.put("currentPage", 0);
+                data.put("size", size);
+                return ResponseEntity.ok(Map.of("code", 200, "data", data, "message", "请选择朋友"));
             }
         } else {
-            // 朋友角色：只允许看自己与管理员的回忆，管理员id固定为1（可从配置获取）
             targetFriendId = 1L;  // 核心用户ID
         }
 
-        List<FriendMemory> memories = friendService.getMemoriesBetween(myId, targetFriendId);
-        List<Map<String, Object>> result = memories.stream().map(m -> {
+        Page<FriendMemory> memoryPage = friendService.getMemoriesBetween(myId, targetFriendId, PageRequest.of(page, size));
+        List<Map<String, Object>> result = memoryPage.getContent().stream().map(m -> {
             Map<String, Object> map = new HashMap<>();
             map.put("id", m.getId());
             map.put("userId", m.getUserId());
@@ -79,11 +85,17 @@ public class FriendController {
             map.put("description", m.getDescription());
             map.put("memoryTime", m.getMemoryTime());
             map.put("createTime", m.getCreateTime());
-            // 可添加作者昵称等信息
             return map;
         }).collect(Collectors.toList());
 
-        return ResponseEntity.ok(Map.of("code", 200, "data", Map.of("items", result), "message", "获取成功"));
+        Map<String, Object> data = new HashMap<>();
+        data.put("items", result);
+        data.put("totalPages", memoryPage.getTotalPages());
+        data.put("totalElements", memoryPage.getTotalElements());
+        data.put("currentPage", memoryPage.getNumber());
+        data.put("size", memoryPage.getSize());
+
+        return ResponseEntity.ok(Map.of("code", 200, "data", data, "message", "获取成功"));
     }
 
     // ----- 添加回忆（双方均可） -----
@@ -91,6 +103,7 @@ public class FriendController {
     public ResponseEntity<Map<String, Object>> addMemory(
             @RequestHeader("token") String token,
             @RequestBody Map<String, String> body) {
+        // 保持不变
         User currentUser = getCurrentUser(token);
         if (currentUser == null) return unauthorized();
 
@@ -98,7 +111,7 @@ public class FriendController {
         if ("admin".equals(currentUser.getRole())) {
             friendId = Long.parseLong(body.get("friendId"));
         } else {
-            friendId = 1L; // 朋友只能和管理员创建回忆
+            friendId = 1L;
         }
         String title = body.get("title");
         String photo = body.get("photo");
@@ -121,9 +134,9 @@ public class FriendController {
     public ResponseEntity<Map<String, Object>> deleteMemory(
             @RequestHeader("token") String token,
             @PathVariable Long memoryId) {
+        // 保持不变
         User currentUser = getCurrentUser(token);
         if (currentUser == null) return unauthorized();
-        // 权限可在 service 中进一步校验
         friendService.deleteMemory(memoryId);
         return ResponseEntity.ok(Map.of("code", 200, "message", "删除成功"));
     }

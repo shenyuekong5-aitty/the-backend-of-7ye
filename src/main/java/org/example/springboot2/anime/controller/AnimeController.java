@@ -10,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 @RestController
 @RequestMapping("/api/anime")
@@ -25,14 +27,23 @@ public class AnimeController {
 
     // 获取番剧列表（无需权限）
     @GetMapping("/list")
-    public ResponseEntity<Map<String, Object>> getAnimeList() {
-        List<Anime> animes = animeService.getAllAnimes();
+    public ResponseEntity<Map<String, Object>> getAnimeList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<Anime> animePage = animeService.getAllAnimes(PageRequest.of(page, size));
+
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);
+
         Map<String, Object> data = new HashMap<>();
-        data.put("items", animes);
-        data.put("message", "获取番剧列表成功");
+        data.put("items", animePage.getContent());
+        data.put("totalPages", animePage.getTotalPages());
+        data.put("totalElements", animePage.getTotalElements());
+        data.put("currentPage", animePage.getNumber());
+        data.put("size", animePage.getSize());
         response.put("data", data);
+        response.put("message", "获取番剧列表成功");
         return ResponseEntity.ok(response);
     }
 

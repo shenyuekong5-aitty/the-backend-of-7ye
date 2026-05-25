@@ -7,6 +7,8 @@ import org.example.springboot2.friend.repository.FriendMemoryRepository;
 import org.example.springboot2.friend.repository.FriendRepository;
 import org.example.springboot2.user.entity.User;
 import org.example.springboot2.user.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,11 +60,9 @@ public class FriendService {
     @Transactional
     public void addFriend(Long myUserId, Long friendUserId) {
         if (myUserId.equals(friendUserId)) throw new RuntimeException("不能添加自己");
-        // 检查是否已经是好友
         if (friendRepository.existsByUserIdAndFriendUserId(myUserId, friendUserId))
             throw new RuntimeException("已经是好友了");
 
-        // 双向插入
         friendRepository.save(new Friend(myUserId, friendUserId));
         friendRepository.save(new Friend(friendUserId, myUserId));
     }
@@ -76,9 +76,9 @@ public class FriendService {
 
     // ========== 回忆管理 ==========
 
-    /** 获取我和某好友之间的专属回忆 */
-    public List<FriendMemory> getMemoriesBetween(Long myUserId, Long friendUserId) {
-        return memoryRepository.findMemoriesBetween(myUserId, friendUserId);
+    /** 获取我和某好友之间的专属回忆（分页） */
+    public Page<FriendMemory> getMemoriesBetween(Long myUserId, Long friendUserId, Pageable pageable) {
+        return memoryRepository.findMemoriesBetween(myUserId, friendUserId, pageable);
     }
 
     /** 添加一条回忆 */
@@ -90,7 +90,6 @@ public class FriendService {
             friendRepository.save(new Friend(friendId, userId));
         }
 
-        // 校验是否为好友关系
         if (!friendRepository.existsByUserIdAndFriendUserId(userId, friendId))
             throw new RuntimeException("你们还不是好友");
 

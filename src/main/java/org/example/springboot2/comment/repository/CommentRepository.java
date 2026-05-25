@@ -43,4 +43,11 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Page<Comment> findByTargetTypeAndParentIdIsNullOrderByCreateTimeDesc(String targetType, Pageable pageable);
 
     Page<Comment> findByParentIdIsNullOrderByCreateTimeDesc(Pageable pageable);
+
+    /**
+     * 批量更新指定用户的所有评论头像
+     */
+    @Modifying
+    @Query("UPDATE Comment c SET c.avatar = :newAvatar WHERE c.userId = :userId")
+    int updateAvatarByUserId(@Param("userId") Long userId, @Param("newAvatar") String newAvatar);
 }

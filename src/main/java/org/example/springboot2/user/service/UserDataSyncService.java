@@ -21,6 +21,8 @@ public class UserDataSyncService {
         if (newNickname != null) {
             commentRepository.updateNicknameByUserId(userId, newNickname);
         }
-        // 后续可在此补充其他模块的同步方法
+        if (newAvatar != null) {
+            commentRepository.updateAvatarByUserId(userId, newAvatar);
+        }
     }
 }

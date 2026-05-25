@@ -5,6 +5,8 @@ import org.example.springboot2.anime.repository.AnimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -14,10 +16,9 @@ public class AnimeService {
     @Autowired
     private AnimeRepository animeRepository;
 
-    public List<Anime> getAllAnimes() {
-        return animeRepository.findAll();
+    public Page<Anime> getAllAnimes(Pageable pageable) {
+        return animeRepository.findAll(pageable);
     }
-
     @Transactional
     public Anime addAnime(Anime anime) {
         anime.setId(null);

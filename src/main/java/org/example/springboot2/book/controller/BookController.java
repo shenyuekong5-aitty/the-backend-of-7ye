@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,17 +26,25 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/list")
-    public ResponseEntity<Map<String, Object>> getBookList() {
-        List<Book> books = bookService.getAllBooks();
+    public ResponseEntity<Map<String, Object>> getBookList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<Book> bookPage = bookService.getAllBooks(PageRequest.of(page, size));
+
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);
+
         Map<String, Object> data = new HashMap<>();
-        data.put("items", books);
-        data.put("message", "获取书籍列表成功");
+        data.put("items", bookPage.getContent());
+        data.put("totalPages", bookPage.getTotalPages());
+        data.put("totalElements", bookPage.getTotalElements());
+        data.put("currentPage", bookPage.getNumber());
+        data.put("size", bookPage.getSize());
         response.put("data", data);
+        response.put("message", "获取书籍列表成功");
         return ResponseEntity.ok(response);
     }
-
     @PostMapping("/add")
     public ResponseEntity<Map<String, Object>> addBook(@RequestHeader(value = "token", required = false) String token,
                                                        @RequestBody Book book) {
