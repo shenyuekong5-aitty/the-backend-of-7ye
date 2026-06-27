@@ -7,9 +7,11 @@ import org.example.springboot2.user.entity.User;
 import org.example.springboot2.user.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,13 +57,21 @@ public class FriendController {
         if (currentUser == null) return unauthorized();
 
         Long myId = currentUser.getId();
-        Long targetFriendId;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<FriendMemory> memoryPage;
 
         if ("admin".equals(currentUser.getRole())) {
             if (partnerId != null) {
-                targetFriendId = partnerId;
+                if (partnerId == 3L || partnerId == 4L) {
+                    List<Long> friendIds = new ArrayList<>();
+                    friendIds.add(3L);
+                    friendIds.add(4L);
+                    memoryPage = friendService.getMemoriesWithFriends(myId, friendIds, pageable);
+                } else {
+                    memoryPage = friendService.getMemoriesBetween(myId, partnerId, pageable);
+                };
             } else {
-                // 未选择朋友，返回空的分页结构
+                // 未选择朋友，返回空分页
                 Map<String, Object> data = new HashMap<>();
                 data.put("items", List.of());
                 data.put("totalPages", 0);
@@ -70,11 +80,20 @@ public class FriendController {
                 data.put("size", size);
                 return ResponseEntity.ok(Map.of("code", 200, "data", data, "message", "请选择朋友"));
             }
-        } else {
-            targetFriendId = 1L;  // 核心用户ID
+        }  else {
+        // 普通朋友：查看自己与另一个朋友（如果特殊规则）的所有回忆
+        List<Long> participantIds = new ArrayList<>();
+        participantIds.add(myId);            // 自己
+        if (myId == 3L) {
+            participantIds.add(4L);          // 如果我是 A，也包含 B
+        } else if (myId == 4L) {
+            participantIds.add(3L);          // 如果我是 B，也包含 A
         }
+        // 注意：不再手动添加管理员 1L，因为管理员参与的回忆已经包含在参与者条件里
+        memoryPage = friendService.getMemoriesByParticipants(participantIds, pageable);
+    }
 
-        Page<FriendMemory> memoryPage = friendService.getMemoriesBetween(myId, targetFriendId, PageRequest.of(page, size));
+        // 转换为 Map 列表
         List<Map<String, Object>> result = memoryPage.getContent().stream().map(m -> {
             Map<String, Object> map = new HashMap<>();
             map.put("id", m.getId());

@@ -20,6 +20,8 @@ public class CognizeController {
     public ResponseEntity<Map<String, Object>> getCognizeList(
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
+        if (pageNo < 1) pageNo = 1;
+
         Map<String, Object> data = cognizeService.getCognizeList(pageNo, pageSize);
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);

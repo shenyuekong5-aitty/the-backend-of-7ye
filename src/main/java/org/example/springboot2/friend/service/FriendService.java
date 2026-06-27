@@ -108,4 +108,13 @@ public class FriendService {
     public void deleteMemory(Long memoryId) {
         memoryRepository.deleteById(memoryId);
     }
+
+    // 应朋友要求，实现的共友回忆
+    public Page<FriendMemory> getMemoriesByParticipants(List<Long> participantIds, Pageable pageable) {
+        return memoryRepository.findByParticipantIds(participantIds, pageable);
+    }
+    // 管理员查看3同时查看4，查看4同时查看6
+    public Page<FriendMemory> getMemoriesWithFriends(Long myUserId, List<Long> friendIds, Pageable pageable) {
+        return memoryRepository.findMemoriesWithFriends(myUserId, friendIds, pageable);
+    }
 }

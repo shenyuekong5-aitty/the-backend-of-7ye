@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface FriendMemoryRepository extends JpaRepository<FriendMemory, Long> {
 
@@ -22,4 +24,21 @@ public interface FriendMemoryRepository extends JpaRepository<FriendMemory, Long
     Page<FriendMemory> findMemoriesBetween(@Param("myId") Long myId,
                                            @Param("friendId") Long friendId,
                                            Pageable pageable);
+
+    //查询多个朋友id -- 共友回忆
+    @Query("SELECT m FROM FriendMemory m WHERE " +
+            "m.userId IN (:participantIds) OR m.friendId IN (:participantIds) " +
+            "ORDER BY m.createTime DESC")
+    Page<FriendMemory> findByParticipantIds(
+            @Param("participantIds") List<Long> participantIds,
+            Pageable pageable);
+    //管理员查看3时同时查看4，查看4时同时查看3
+    @Query("SELECT m FROM FriendMemory m WHERE " +
+            "(m.userId = :myId AND m.friendId IN (:friendIds)) " +
+            "OR (m.userId IN (:friendIds) AND m.friendId = :myId) " +
+            "ORDER BY m.createTime DESC")
+    Page<FriendMemory> findMemoriesWithFriends(
+            @Param("myId") Long myId,
+            @Param("friendIds") List<Long> friendIds,
+            Pageable pageable);
 }
