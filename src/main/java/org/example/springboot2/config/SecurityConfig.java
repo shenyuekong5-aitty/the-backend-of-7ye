@@ -91,7 +91,8 @@ public class SecurityConfig {
                                 antMatcher("/api/user/deactivate"),
                                 antMatcher("/api/friend/**"),
                                 antMatcher("/api/memory/**"),
-                                antMatcher("/api/notice/**")
+                                antMatcher("/api/notice/**"),
+                                antMatcher("/api/ai/**")
                         ).permitAll()
                         .requestMatchers(antMatcher("/static/**"), antMatcher("/favicon.ico"), antMatcher("/error"), antMatcher("/assets/**")).permitAll()
                         .anyRequest().authenticated()

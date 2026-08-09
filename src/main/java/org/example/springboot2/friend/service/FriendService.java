@@ -109,6 +109,11 @@ public class FriendService {
         memoryRepository.deleteById(memoryId);
     }
 
+    /** 判断 userId 是否为 ownerUserId 的好友 (用于 AI 权限判定) */
+    public boolean isFriend(Long ownerUserId, Long userId) {
+        return friendRepository.existsByUserIdAndFriendUserId(ownerUserId, userId);
+    }
+
     // 应朋友要求，实现的共友回忆
     public Page<FriendMemory> getMemoriesByParticipants(List<Long> participantIds, Pageable pageable) {
         return memoryRepository.findByParticipantIds(participantIds, pageable);
