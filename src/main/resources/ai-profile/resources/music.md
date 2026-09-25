@@ -2,7 +2,7 @@
 
 > 快照日期：2026-08-08  
 > 来源表：`sys_music`  
-> 默认权限：Owner  
+> 默认权限：Friend  
 > 解释限制：这里只能证明数据库收录了该条目，不能自动推断为已看、已玩、已读、长期喜欢或本人评价。
 
 本文件由 `scripts/export_resources.py` 单向生成。数据库是原始事实来源；请勿手工反向同步本文件。
@@ -14,7 +14,7 @@
 - 标题：起风了
 - 作者/创作者：买辣椒也用券
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -26,7 +26,7 @@
 - 标题：笔记
 - 作者/创作者：周笔畅
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -38,7 +38,7 @@
 - 标题：烟火里的尘埃
 - 作者/创作者：华晨宇
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -50,7 +50,7 @@
 - 标题：好像爱这个世界
 - 作者/创作者：华晨宇
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -62,7 +62,7 @@
 - 标题：打上花火
 - 作者/创作者：DAOKO / 米津玄師
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -74,7 +74,7 @@
 - 标题：东京不太热
 - 作者/创作者：洛天依 / 初心社
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -86,7 +86,7 @@
 - 标题：口是心非
 - 作者/创作者：张雨生
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -98,7 +98,7 @@
 - 标题：走马
 - 作者/创作者：陈粒
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -110,7 +110,7 @@
 - 标题：天下
 - 作者/创作者：张杰
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -122,7 +122,7 @@
 - 标题：不染
 - 作者/创作者：毛不易
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -134,7 +134,7 @@
 - 标题：消愁
 - 作者/创作者：毛不易
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -146,7 +146,7 @@
 - 标题：像我这样的人
 - 作者/创作者：毛不易
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -158,7 +158,7 @@
 - 标题：此生不换
 - 作者/创作者：青鸟飞鱼
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -170,7 +170,7 @@
 - 标题：东西
 - 作者/创作者：林俊呈
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -182,7 +182,7 @@
 - 标题：Ngau Hung
 - 作者/创作者：Hoaprox
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -194,7 +194,7 @@
 - 标题：烟袋斜街
 - 作者/创作者：音阙诗听 / 赵方婧
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -206,7 +206,7 @@
 - 标题：letter
 - 作者/创作者：Iris
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -218,7 +218,7 @@
 - 标题：Flower Dance
 - 作者/创作者：DJ Okawari
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -230,7 +230,7 @@
 - 标题：luv letter
 - 作者/创作者：DJ Okawari
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -242,7 +242,7 @@
 - 标题：trap queen
 - 作者/创作者：Fetty Wap
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -254,7 +254,7 @@
 - 标题：Aruarian Dance
 - 作者/创作者：Nujabes
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -266,7 +266,7 @@
 - 标题：呓语
 - 作者/创作者：毛不易
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -278,7 +278,7 @@
 - 标题：水星记
 - 作者/创作者：郭顶
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -290,7 +290,7 @@
 - 标题：年轮
 - 作者/创作者：张碧晨
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -302,7 +302,7 @@
 - 标题：III
 - 作者/创作者：Atheletics
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -314,7 +314,7 @@
 - 标题：IV
 - 作者/创作者：Mapps/AK
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -326,7 +326,7 @@
 - 标题：从你的全世界路过
 - 作者/创作者：牛奶咖啡
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -338,7 +338,7 @@
 - 标题：Yakitori
 - 作者/创作者：Noicybino
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -350,7 +350,7 @@
 - 标题：THEMEX
 - 作者/创作者：泽野弘之
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -362,7 +362,7 @@
 - 标题：Meant To Be
 - 作者/创作者：Bebe Rexha / Florida Georgia Line
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -374,7 +374,7 @@
 - 标题：Contact
 - 作者/创作者：Daft Punk
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -386,7 +386,7 @@
 - 标题：The Garden of Escapism
 - 作者/创作者：Miro
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -398,7 +398,7 @@
 - 标题：Merry Christmas Mr.Lawrence
 - 作者/创作者：坂本龙一
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -410,7 +410,7 @@
 - 标题：开始懂了
 - 作者/创作者：孙燕姿
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -422,7 +422,7 @@
 - 标题：我记得
 - 作者/创作者：赵雷
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -434,7 +434,7 @@
 - 标题：偏爱
 - 作者/创作者：张芸京
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -446,7 +446,7 @@
 - 标题：城南花已开
 - 作者/创作者：三亩地
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -458,7 +458,7 @@
 - 标题：luv u 2
 - 作者/创作者：Seto
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -470,19 +470,24 @@
 - 标题：海街寺庙
 - 作者/创作者：七月的星期七
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
 
-## 就让这大雨全都落下
 
-- ID：music_43
-- 类型：music
-- 标题：就让这大雨全都落下
-- 作者/创作者：容祖儿
-- 状态：仅收录，未记录消费状态
-- 权限：Owner
-- 来源：personal-database
-- 快照日期：2026-08-08
-- 可信度：database-record
+# 以下为手动添加
+王力宏 --《错爱》
+王者荣耀 -- 《风自来》
+Suginami Junior Chorus -- 《BUBBLE-cho.》
+泽野弘之 -- 《4ゅN》
+泽野弘之 -- 《βios》
+BigBang -- 《IF YOU》
+BigBang -- 《하루하루 (一天一天)》
+BigBang -- 《Lies》
+辉星 -- 《Insomnia》
+Thomas Greenberg -- 《The Right Path》
+
+**PS:**现在先提供这么多吧，后面需要的可以
+网易云音乐搜索：《神赐的救赎道》
+QQ音乐搜索：3316900024

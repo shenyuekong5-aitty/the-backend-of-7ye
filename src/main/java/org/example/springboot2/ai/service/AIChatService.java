@@ -13,8 +13,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 @Service
@@ -53,6 +58,18 @@ public class AIChatService {
             Pattern.compile("(?i)(验证码|code|otp)\\s*[:=]\\s*\\S+"),
     };
 
+    /** 无关键词续问标记，命中且当前检索为空时回退到上一轮资源类型 */
+    private static final String[] CONTINUATION_MARKERS = {
+            "再", "换", "继续", "再来", "还有", "另一", "别的", "下一", "另外", "其他", "跟刚才",
+    };
+
+    /** 每个会话已展示过的文档 ID（用于“再推荐一首”时给出未展示过的新条目） */
+    private final Map<String, Set<String>> sessionShownIds = new ConcurrentHashMap<>();
+    /** 每个会话最近一轮命中的资源类型 */
+    private final Map<String, Set<String>> sessionLastTypes = new ConcurrentHashMap<>();
+
+    private static final int MAX_SHOWN_IDS_PER_SESSION = 200;
+
     public AIChatService(DocumentIndexService documentIndexService,
                          PromptBuilder promptBuilder,
                          SessionHistoryService sessionHistoryService,
@@ -78,6 +95,19 @@ public class AIChatService {
 
         List<Document> allowedDocs = documentIndexService.getDocumentsByRole(role);
         List<Document> retrievedDocs = documentIndexService.search(allowedDocs, question, 5);
+
+        if (retrievedDocs.isEmpty() && isContinuation(question)) {
+            Set<String> lastTypes = sessionLastTypes.get(sessionId);
+            if (lastTypes != null && !lastTypes.isEmpty()) {
+                List<Document> followUp = documentIndexService.nextForTypes(
+                        allowedDocs, lastTypes, sessionShownIds.getOrDefault(sessionId, Set.of()), 5);
+                if (!followUp.isEmpty()) {
+                    retrievedDocs = followUp;
+                }
+            }
+        }
+
+        recordShown(sessionId, retrievedDocs);
 
         String systemPrompt = promptBuilder.buildSystemPrompt(role, retrievedDocs);
 
@@ -153,6 +183,33 @@ public class AIChatService {
             // ignore
         }
         return "Public";
+    }
+
+    private boolean isContinuation(String question) {
+        for (String marker : CONTINUATION_MARKERS) {
+            if (question.contains(marker)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void recordShown(String sessionId, List<Document> docs) {
+        if (docs == null || docs.isEmpty()) {
+            return;
+        }
+        Set<String> types = new HashSet<>();
+        Set<String> shownIds = sessionShownIds.computeIfAbsent(sessionId, k -> new LinkedHashSet<>());
+        for (Document doc : docs) {
+            types.add(doc.getType());
+            shownIds.add(doc.getId());
+        }
+        while (shownIds.size() > MAX_SHOWN_IDS_PER_SESSION) {
+            Iterator<String> it = shownIds.iterator();
+            it.next();
+            it.remove();
+        }
+        sessionLastTypes.put(sessionId, types);
     }
 
     private String sanitizeAnswer(String answer) {

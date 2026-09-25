@@ -8,7 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,19 +37,19 @@ public class AIComponentTests {
     @Test
     void testPublicRoleOnlyAccessesPublic() {
         List<Document> publicDocs = documentIndexService.getDocumentsByRole("Public");
-        assertTrue(publicDocs.isEmpty(), "Public should have no accessible documents since all resources are Owner");
+        assertTrue(publicDocs.isEmpty(), "Public should have no accessible documents since resources are Friend or above");
     }
 
     @Test
-    void testFriendRoleOnlyAccessesPublicAndFriend() {
+    void testFriendRoleAccessesFriendResources() {
         List<Document> friendDocs = documentIndexService.getDocumentsByRole("Friend");
-        assertTrue(friendDocs.isEmpty(), "Friend should have no accessible documents since all resources are Owner");
+        assertFalse(friendDocs.isEmpty(), "Friend should have access to Friend-permission resources");
     }
 
     @Test
     void testOwnerRoleAccessesAll() {
         List<Document> ownerDocs = documentIndexService.getDocumentsByRole("Owner");
-        assertEquals(244, ownerDocs.size(), "Owner should have access to all 244 documents");
+        assertEquals(documentIndexService.getDocumentCount(), ownerDocs.size(), "Owner should have access to all documents");
     }
 
     @Test
@@ -62,6 +65,76 @@ public class AIComponentTests {
         List<Document> ownerDocs = documentIndexService.getDocumentsByRole("Owner");
         List<Document> results = documentIndexService.search(ownerDocs, "", 5);
         assertTrue(results.isEmpty(), "Empty query should return no results");
+    }
+
+    @Test
+    void testSearchIntentFallbackMusic() {
+        List<Document> ownerDocs = documentIndexService.getDocumentsByRole("Owner");
+        List<Document> results = documentIndexService.search(ownerDocs, "推荐一首歌", 5);
+        assertFalse(results.isEmpty(), "Intent query '推荐一首歌' should retrieve music docs for Owner");
+        assertTrue(results.stream().allMatch(d -> "music".equals(d.getType())));
+    }
+
+    @Test
+    void testSearchIntentFallbackGames() {
+        List<Document> ownerDocs = documentIndexService.getDocumentsByRole("Owner");
+        List<Document> results = documentIndexService.search(ownerDocs, "推荐个游戏", 5);
+        assertFalse(results.isEmpty(), "Intent query '推荐个游戏' should retrieve games docs for Owner");
+        assertTrue(results.stream().allMatch(d -> "games".equals(d.getType())));
+    }
+
+    @Test
+    void testSearchIntentFallbackForFriend() {
+        List<Document> friendDocs = documentIndexService.getDocumentsByRole("Friend");
+        List<Document> results = documentIndexService.search(friendDocs, "推荐一首歌", 5);
+        assertFalse(results.isEmpty(), "Friend should retrieve music docs via intent fallback");
+        assertTrue(results.stream().allMatch(d -> "music".equals(d.getType())));
+    }
+
+    @Test
+    void testSearchIntentFallbackPersonalLibrary() {
+        List<Document> ownerDocs = documentIndexService.getDocumentsByRole("Owner");
+        assertSearchType(ownerDocs, "你的人生信条是什么", "creed");
+        assertSearchType(ownerDocs, "小烨说过什么名言", "quotes");
+        assertSearchType(ownerDocs, "你有什么昵称", "nicknames");
+        assertSearchType(ownerDocs, "你对朋友有什么看法", "cognition");
+    }
+
+    @Test
+    void testSearchMixedTypesIncludesEachType() {
+        List<Document> ownerDocs = documentIndexService.getDocumentsByRole("Owner");
+        List<Document> results = documentIndexService.search(ownerDocs, "推荐一首歌和一本小说", 5);
+        assertFalse(results.isEmpty());
+        assertTrue(results.stream().anyMatch(d -> "music".equals(d.getType())), "Should include at least one music doc");
+        assertTrue(results.stream().anyMatch(d -> "books".equals(d.getType())), "Should include at least one books doc");
+        assertTrue(results.size() <= 5);
+    }
+
+    @Test
+    void testNextForTypesExcludesShownAndCycles() {
+        List<Document> ownerDocs = documentIndexService.getDocumentsByRole("Owner");
+        List<Document> first = documentIndexService.nextForTypes(ownerDocs, Set.of("music"), Set.of(), 5);
+        assertFalse(first.isEmpty());
+        assertTrue(first.stream().allMatch(d -> "music".equals(d.getType())));
+
+        List<String> idsToExclude = first.stream()
+                .map(Document::getId)
+                .collect(Collectors.toList());
+        List<Document> second = documentIndexService.nextForTypes(ownerDocs, Set.of("music"), idsToExclude, 5);
+        assertFalse(second.isEmpty(), "Should return new entries");
+        assertTrue(second.stream().noneMatch(d -> idsToExclude.contains(d.getId())), "Should not repeat shown entries");
+
+        Set<String> allIds = new HashSet<>();
+        ownerDocs.stream().filter(d -> "music".equals(d.getType())).forEach(d -> allIds.add(d.getId()));
+        List<Document> cycled = documentIndexService.nextForTypes(ownerDocs, Set.of("music"), allIds, 5);
+        assertFalse(cycled.isEmpty(), "Should cycle back when all entries were shown");
+    }
+
+    private void assertSearchType(List<Document> ownerDocs, String query, String expectedType) {
+        List<Document> results = documentIndexService.search(ownerDocs, query, 5);
+        assertFalse(results.isEmpty(), "Intent query '" + query + "' should retrieve " + expectedType + " docs");
+        assertTrue(results.stream().allMatch(d -> expectedType.equals(d.getType())),
+                "Intent query '" + query + "' should only retrieve " + expectedType + " docs");
     }
 
     @Test

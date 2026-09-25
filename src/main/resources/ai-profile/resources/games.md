@@ -2,7 +2,7 @@
 
 > 快照日期：2026-08-08  
 > 来源表：`sys_game`  
-> 默认权限：Owner  
+> 默认权限：Friend  
 > 解释限制：这里只能证明数据库收录了该条目，不能自动推断为已看、已玩、已读、长期喜欢或本人评价。
 
 本文件由 `scripts/export_resources.py` 单向生成。数据库是原始事实来源；请勿手工反向同步本文件。
@@ -14,7 +14,7 @@
 - 标题：星露谷
 - 作者/创作者：ConcernedApe
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -30,7 +30,7 @@
 - 标题：饥荒
 - 作者/创作者：Klei Entertainment
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -46,7 +46,7 @@
 - 标题：文明6
 - 作者/创作者：Firaxis Games
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -62,7 +62,7 @@
 - 标题：霍格沃茨之遗
 - 作者/创作者：Avalanche Software
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -78,7 +78,7 @@
 - 标题：东京幽灵线
 - 作者/创作者：Tango Gameworks
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -94,7 +94,7 @@
 - 标题：双人成行
 - 作者/创作者：Hazelight Studios
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -110,7 +110,7 @@
 - 标题：GTA5
 - 作者/创作者：Rockstar
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -126,7 +126,7 @@
 - 标题：Sherlock Holmes
 - 作者/创作者：Frogwares
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -142,7 +142,7 @@
 - 标题：The crew2
 - 作者/创作者：Ubisoft
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -158,7 +158,7 @@
 - 标题：Thief Simulator
 - 作者/创作者：Noble Muffins
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -174,7 +174,7 @@
 - 标题：This War of Mine
 - 作者/创作者：11 Bit Studios
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -190,7 +190,7 @@
 - 标题：方舟
 - 作者/创作者：Studio Wildcard
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -206,7 +206,7 @@
 - 标题：炼爱
 - 作者/创作者：独立开发者
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -222,7 +222,7 @@
 - 标题：究极风暴
 - 作者/创作者：CyberConnect2
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -238,7 +238,7 @@
 - 标题：白色情人节
 - 作者/创作者：Rootstudio
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -254,7 +254,7 @@
 - 标题：学园构想家
 - 作者/创作者：国产独立游戏
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -270,7 +270,7 @@
 - 标题：纪元1800
 - 作者/创作者：Ubisoft
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -286,7 +286,7 @@
 - 标题：王者荣耀
 - 作者/创作者：腾讯天美
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -302,7 +302,7 @@
 - 标题：火影忍者
 - 作者/创作者：腾讯魔方
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -318,7 +318,7 @@
 - 标题：时空召唤
 - 作者/创作者：银汉游戏
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -334,7 +334,7 @@
 - 标题：罪恶都市
 - 作者/创作者：Rockstar
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -350,7 +350,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：帝国时代
 - 作者/创作者：微软
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -366,7 +366,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：魔兽
 - 作者/创作者：暴雪
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -382,7 +382,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：流星蝴蝶剑
 - 作者/创作者：昱泉国际
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -398,7 +398,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：血战上海滩
 - 作者/创作者：欢乐亿派
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -414,7 +414,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：真三国无双
 - 作者/创作者：光荣特库摩
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -430,7 +430,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：植物大战僵尸
 - 作者/创作者：PopCap
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -446,7 +446,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：炸弹堂
 - 作者/创作者：Nexon
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -462,7 +462,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：水果忍者
 - 作者/创作者：Halfbrick
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -478,7 +478,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：汤姆猫
 - 作者/创作者：Outfit7
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -494,7 +494,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：我的世界
 - 作者/创作者：Mojang
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -510,7 +510,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：遗弃之地
 - 作者/创作者：独立开发者
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -526,7 +526,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：英雄联盟
 - 作者/创作者：拳头游戏
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -542,7 +542,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：邪恶天才2
 - 作者/创作者：Rebellion
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -558,7 +558,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：求生之路
 - 作者/创作者：Valve
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -574,7 +574,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：死神vs火影
 - 作者/创作者：5Dplay
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -590,7 +590,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：拳皇2002风云再起
 - 作者/创作者：SNK
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -606,7 +606,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：街机游戏
 - 作者/创作者：经典合集
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -622,7 +622,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：小霸王游戏
 - 作者/创作者：怀旧合集
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -638,7 +638,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：饥饿鲨
 - 作者/创作者：育碧
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -654,7 +654,7 @@ GTA经典开放世界动作冒险怀旧神作
 - 标题：黄金矿工
 - 作者/创作者：GameRival
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record

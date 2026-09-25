@@ -2,7 +2,7 @@
 
 > 快照日期：2026-08-08  
 > 来源表：`sys_nickname`  
-> 默认权限：Owner  
+> 默认权限：Friend  
 > 解释限制：这些是数据库收录过的名字或昵称，不代表当前仍在使用，也不能据此关联现实身份。
 
 本文件由 `scripts/export_resources.py` 单向生成。数据库是原始事实来源；请勿手工反向同步本文件。
@@ -11,7 +11,7 @@
 
 - ID：nickname_1
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -24,7 +24,7 @@
 
 - ID：nickname_2
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -37,7 +37,7 @@
 
 - ID：nickname_3
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -50,7 +50,7 @@
 
 - ID：nickname_4
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -63,7 +63,7 @@
 
 - ID：nickname_5
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -76,7 +76,7 @@
 
 - ID：nickname_6
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -89,7 +89,7 @@
 
 - ID：nickname_7
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -102,7 +102,7 @@
 
 - ID：nickname_8
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -115,7 +115,7 @@
 
 - ID：nickname_9
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -128,7 +128,7 @@
 
 - ID：nickname_10
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -141,7 +141,7 @@
 
 - ID：nickname_11
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -154,7 +154,7 @@
 
 - ID：nickname_12
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -167,7 +167,7 @@
 
 - ID：nickname_13
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -180,7 +180,7 @@ breeze
 
 - ID：nickname_14
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -193,7 +193,7 @@ Gemini
 
 - ID：nickname_15
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -206,7 +206,7 @@ beam
 
 - ID：nickname_16
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -219,7 +219,7 @@ Aitty
 
 - ID：nickname_17
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -232,7 +232,7 @@ AittyFlora
 
 - ID：nickname_18
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -245,7 +245,7 @@ AittyFlora
 
 - ID：nickname_19
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -258,7 +258,7 @@ AittyFlora
 
 - ID：nickname_20
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -271,7 +271,7 @@ AittyFlora
 
 - ID：nickname_21
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -284,7 +284,7 @@ AittyFlora
 
 - ID：nickname_22
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -297,7 +297,7 @@ AittyFlora
 
 - ID：nickname_23
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -310,7 +310,7 @@ AittyFlora
 
 - ID：nickname_24
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -323,7 +323,7 @@ yamanaiame
 
 - ID：nickname_25
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -336,7 +336,7 @@ yamanaiame
 
 - ID：nickname_26
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -349,7 +349,7 @@ yamanaiame
 
 - ID：nickname_27
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -362,7 +362,7 @@ yamanaiame
 
 - ID：nickname_28
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -375,7 +375,7 @@ yamanaiame
 
 - ID：nickname_29
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -388,7 +388,7 @@ yamanaiame
 
 - ID：nickname_30
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -401,7 +401,7 @@ yamanaiame
 
 - ID：nickname_31
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -414,7 +414,7 @@ yamanaiame
 
 - ID：nickname_32
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -427,7 +427,7 @@ yamanaiame
 
 - ID：nickname_33
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -440,7 +440,7 @@ yamanaiame
 
 - ID：nickname_34
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -453,7 +453,7 @@ yamanaiame
 
 - ID：nickname_35
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -466,7 +466,7 @@ yamanaiame
 
 - ID：nickname_36
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -479,7 +479,7 @@ yamanaiame
 
 - ID：nickname_37
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -492,7 +492,7 @@ yamanaiame
 
 - ID：nickname_38
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -505,7 +505,7 @@ yamanaiame
 
 - ID：nickname_39
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -518,7 +518,7 @@ yamanaiame
 
 - ID：nickname_40
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -531,7 +531,7 @@ yamanaiame
 
 - ID：nickname_41
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -544,7 +544,7 @@ yamanaiame
 
 - ID：nickname_42
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -557,7 +557,7 @@ yamanaiame
 
 - ID：nickname_43
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -570,7 +570,7 @@ yamanaiame
 
 - ID：nickname_44
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -583,7 +583,7 @@ yamanaiame
 
 - ID：nickname_45
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -596,7 +596,7 @@ tyi
 
 - ID：nickname_46
 - 类型：nickname
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record

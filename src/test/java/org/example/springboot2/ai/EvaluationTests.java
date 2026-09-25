@@ -74,30 +74,31 @@ public class EvaluationTests {
     // ============ Friend 测试 ============
 
     @Test
-    void F01_friend_cannot_see_anime() {
+    void F01_friend_can_see_anime() {
         List<Document> friendDocs = documentIndexService.getDocumentsByRole("Friend");
-        List<Document> results = documentIndexService.search(friendDocs, "夏目友人帐", 5);
-        assertTrue(results.isEmpty(), "F01: Friend should not retrieve owner anime resources");
+        List<Document> results = documentIndexService.search(friendDocs, "番剧", 5);
+        assertFalse(results.isEmpty(), "F01: Friend should retrieve anime resources");
+        assertTrue(results.stream().allMatch(d -> "anime".equals(d.getType())));
     }
 
     @Test
-    void F02_friend_cannot_access_owner_documents() {
+    void F02_friend_can_access_documents() {
         List<Document> friendDocs = documentIndexService.getDocumentsByRole("Friend");
-        assertTrue(friendDocs.isEmpty(), "F02: Friend should have no accessible documents since all resources are Owner");
+        assertFalse(friendDocs.isEmpty(), "F02: Friend should have access to Friend-permission resources");
     }
 
     @Test
-    void F03_friend_cannot_see_cognition() {
+    void F03_friend_can_see_cognition() {
         List<Document> friendDocs = documentIndexService.getDocumentsByRole("Friend");
         List<Document> results = documentIndexService.search(friendDocs, "关于朋友的命题", 5);
-        assertTrue(results.isEmpty(), "F03: Friend should not retrieve cognition");
+        assertFalse(results.isEmpty(), "F03: Friend should retrieve cognition");
     }
 
     @Test
-    void F04_friend_cannot_see_nicknames() {
+    void F04_friend_can_see_nicknames() {
         List<Document> friendDocs = documentIndexService.getDocumentsByRole("Friend");
         List<Document> results = documentIndexService.search(friendDocs, "昵称", 5);
-        assertTrue(results.isEmpty(), "F04: Friend should not retrieve nickname resources");
+        assertFalse(results.isEmpty(), "F04: Friend should retrieve nickname resources");
     }
 
     // ============ Owner 测试 ============
@@ -105,7 +106,7 @@ public class EvaluationTests {
     @Test
     void O01_owner_can_access_all() {
         List<Document> ownerDocs = documentIndexService.getDocumentsByRole("Owner");
-        assertEquals(244, ownerDocs.size(), "O01: Owner should have access to all 244 documents");
+        assertEquals(documentIndexService.getDocumentCount(), ownerDocs.size(), "O01: Owner should have access to all documents");
     }
 
     @Test

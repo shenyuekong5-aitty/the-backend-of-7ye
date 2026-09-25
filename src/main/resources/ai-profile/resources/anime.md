@@ -2,7 +2,7 @@
 
 > 快照日期：2026-08-08  
 > 来源表：`sys_anime`  
-> 默认权限：Owner  
+> 默认权限：Friend  
 > 解释限制：这里只能证明数据库收录了该条目，不能自动推断为已看、已玩、已读、长期喜欢或本人评价。
 
 本文件由 `scripts/export_resources.py` 单向生成。数据库是原始事实来源；请勿手工反向同步本文件。
@@ -14,7 +14,7 @@
 - 标题：关于我转生为史莱姆这档事
 - 作者/创作者：伏濑
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -30,7 +30,7 @@
 - 标题：Overlord
 - 作者/创作者：丸山黄金
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -46,7 +46,7 @@
 - 标题：全职猎人
 - 作者/创作者：富坚义博
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -62,7 +62,7 @@
 - 标题：月光下的异世界之旅
 - 作者/创作者：白米良
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -78,7 +78,7 @@
 - 标题：魔王学院的不适任者
 - 作者/创作者：秋
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -94,7 +94,7 @@
 - 标题：JOJO的奇妙冒险
 - 作者/创作者：荒木飞吕彦
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -110,7 +110,7 @@
 - 标题：野良神
 - 作者/创作者：安达渡嘉
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -126,7 +126,7 @@
 - 标题：鬼灭之刃
 - 作者/创作者：吾峠呼世晴
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -142,7 +142,7 @@
 - 标题：死神
 - 作者/创作者：久保带人
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -158,7 +158,7 @@
 - 标题：火影忍者
 - 作者/创作者：岸本齐史
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -174,7 +174,7 @@
 - 标题：七龙珠
 - 作者/创作者：鸟山明
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -190,7 +190,7 @@
 - 标题：七龙珠Z
 - 作者/创作者：鸟山明
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -206,7 +206,7 @@
 - 标题：七龙珠GT
 - 作者/创作者：鸟山明
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -222,7 +222,7 @@
 - 标题：犬夜叉
 - 作者/创作者：高桥留美子
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -238,7 +238,7 @@
 - 标题：银魂
 - 作者/创作者：空知英秋
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -254,7 +254,7 @@
 - 标题：恶魔奶爸
 - 作者/创作者：田村隆平
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -270,7 +270,7 @@
 - 标题：夏日重现
 - 作者/创作者：田中靖规
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -286,7 +286,7 @@
 - 标题：死亡笔记
 - 作者/创作者：大场鸫、小畑健
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -302,7 +302,7 @@
 - 标题：咒术回战
 - 作者/创作者：芥见下下
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -318,7 +318,7 @@
 - 标题：海贼王
 - 作者/创作者：尾田荣一郎
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -334,7 +334,7 @@
 - 标题：怪医黑杰克
 - 作者/创作者：手冢治虫
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -350,7 +350,7 @@
 - 标题：城市猎人
 - 作者/创作者：北条司
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -366,7 +366,7 @@
 - 标题：樱桃小丸子
 - 作者/创作者：樱桃子
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -382,7 +382,7 @@
 - 标题：哆啦A梦
 - 作者/创作者：藤子·F·不二雄
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -398,7 +398,7 @@
 - 标题：蜡笔小新
 - 作者/创作者：臼井仪人
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -414,7 +414,7 @@
 - 标题：苍兰决
 - 作者/创作者：九鹭非香
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -430,7 +430,7 @@
 - 标题：夏目友人帐
 - 作者/创作者：绿川幸
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record

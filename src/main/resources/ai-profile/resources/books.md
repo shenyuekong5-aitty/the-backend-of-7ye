@@ -2,7 +2,7 @@
 
 > 快照日期：2026-08-08  
 > 来源表：`sys_book`  
-> 默认权限：Owner  
+> 默认权限：Friend  
 > 解释限制：这里只能证明数据库收录了该条目，不能自动推断为已看、已玩、已读、长期喜欢或本人评价。
 
 本文件由 `scripts/export_resources.py` 单向生成。数据库是原始事实来源；请勿手工反向同步本文件。
@@ -14,7 +14,7 @@
 - 标题：平凡的世界
 - 作者/创作者：路遥
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -30,7 +30,7 @@
 - 标题：小巷人家
 - 作者/创作者：大米
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -46,7 +46,7 @@
 - 标题：三体
 - 作者/创作者：刘慈欣
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -62,7 +62,7 @@
 - 标题：云边有个小卖铺
 - 作者/创作者：张嘉佳
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -78,7 +78,7 @@
 - 标题：嫌疑人X的献身
 - 作者/创作者：东野圭吾
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -94,7 +94,7 @@
 - 标题：罪与罚
 - 作者/创作者：陀思妥耶夫斯基
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -110,7 +110,7 @@
 - 标题：哑舍
 - 作者/创作者：玄色
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -126,7 +126,7 @@
 - 标题：龙族
 - 作者/创作者：江南
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -142,7 +142,7 @@
 - 标题：人间失格
 - 作者/创作者：太宰治
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -158,7 +158,7 @@
 - 标题：活着
 - 作者/创作者：余华
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -174,7 +174,7 @@
 - 标题：第七天
 - 作者/创作者：余华
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -190,7 +190,7 @@
 - 标题：素食者
 - 作者/创作者：韩江
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -206,7 +206,7 @@
 - 标题：小王子
 - 作者/创作者：安托万·德·圣-埃克苏佩里
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -222,7 +222,7 @@
 - 标题：恶意
 - 作者/创作者：东野圭吾
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -238,7 +238,7 @@
 - 标题：双城记
 - 作者/创作者：狄更斯
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -254,7 +254,7 @@
 - 标题：月亮与六便士
 - 作者/创作者：毛姆
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -270,7 +270,7 @@
 - 标题：解忧杂货店
 - 作者/创作者：东野圭吾
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -286,7 +286,7 @@
 - 标题：摆渡人
 - 作者/创作者：克莱儿·麦克福尔
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -302,7 +302,7 @@
 - 标题：疯人说：精神病院医生手记
 - 作者/创作者：穆戈
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -318,7 +318,7 @@
 - 标题：病隙碎笔
 - 作者/创作者：史铁生
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -334,7 +334,7 @@
 - 标题：布鲁克林有棵树
 - 作者/创作者：贝蒂·史密斯
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -350,7 +350,7 @@
 - 标题：被讨厌的勇气
 - 作者/创作者：岸见一郎/古贺史健
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -366,7 +366,7 @@
 - 标题：山茶文具店
 - 作者/创作者：小川糸
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -382,7 +382,7 @@
 - 标题：在细雨中呐喊
 - 作者/创作者：余华
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -398,7 +398,7 @@
 - 标题：她的国
 - 作者/创作者：夏洛特·珀金斯·吉尔曼
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -414,7 +414,7 @@
 - 标题：一间属于自己的房间
 - 作者/创作者：弗吉尼亚·伍尔夫
 - 状态：仅收录，未记录消费状态
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record

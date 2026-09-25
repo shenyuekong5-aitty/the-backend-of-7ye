@@ -2,7 +2,7 @@
 
 > 快照日期：2026-08-08  
 > 来源表：`sys_quote`  
-> 默认权限：Owner  
+> 默认权限：Friend  
 > 解释限制：这些是数据库保存的句子；收录不等于原创、赞同或当前立场，原作者与出处未经数据库字段验证。
 
 本文件由 `scripts/export_resources.py` 单向生成。数据库是原始事实来源；请勿手工反向同步本文件。
@@ -11,7 +11,7 @@
 
 - ID：quote_1
 - 类型：quote
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -24,7 +24,7 @@
 
 - ID：quote_2
 - 类型：quote
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -37,7 +37,7 @@
 
 - ID：quote_3
 - 类型：quote
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -50,7 +50,7 @@
 
 - ID：quote_4
 - 类型：quote
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -63,7 +63,7 @@
 
 - ID：quote_5
 - 类型：quote
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -76,7 +76,7 @@
 
 - ID：quote_6
 - 类型：quote
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -89,7 +89,7 @@
 
 - ID：quote_7
 - 类型：quote
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -102,7 +102,7 @@
 
 - ID：quote_8
 - 类型：quote
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -115,7 +115,7 @@
 
 - ID：quote_9
 - 类型：quote
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -128,7 +128,7 @@
 
 - ID：quote_10
 - 类型：quote
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -141,7 +141,7 @@
 
 - ID：quote_11
 - 类型：quote
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -154,7 +154,7 @@
 
 - ID：quote_14
 - 类型：quote
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
@@ -167,7 +167,7 @@
 
 - ID：quote_15
 - 类型：quote
-- 权限：Owner
+- 权限：Friend
 - 来源：personal-database
 - 快照日期：2026-08-08
 - 可信度：database-record
